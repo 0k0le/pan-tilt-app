@@ -1,0 +1,8 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/okole/Projects/camera-example-application'
+mkdir -p bin bin-int
+g++ src/main.cpp -o bin-int/main.o -Wall -Wextra -pedantic -std=c++2a -c -O2 -I src/include
+g++  bin-int/main.o -o bin/camapp
+echo Build System Exiting
+make: Leaving directory '/home/okole/Projects/camera-example-application'
+ 
