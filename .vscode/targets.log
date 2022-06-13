@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Jun 13 10:49:45 2022
+# Make data base, printed on Mon Jun 13 11:19:18 2022
 
 # Variables
 
@@ -21,6 +21,7 @@ DESKTOP_SESSION = gnome
 # default
 .SHELLFLAGS := -c
 # environment
+ 
 XDG_SESSION_CLASS = user
 # environment
 XDG_SESSION_TYPE = x11
@@ -167,7 +168,7 @@ LESS = -R
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # makefile (from 'makefile', line 8)
-LINKERFLAGS = `pkg-config Qt5Gui --libs`
+LINKERFLAGS = `pkg-config Qt5Widgets --libs`
 # environment
 GENICAM_GENTL64_PATH = :/opt/pylon/lib/gentlproducer/gtl:/opt/pylon/lib/pylonCXP/bin/
 # default
@@ -217,7 +218,7 @@ GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # default
 SUFFIXES := 
 # makefile (from 'makefile', line 7)
-BUILDFLAGS = -Wall -Wextra -pedantic -std=c++2a -c -O2 -I src/include `pkg-config Qt5Gui --cflags`
+BUILDFLAGS = -Wall -Wextra -pedantic -fpic -std=c++2a -c -O2 -I src/include `pkg-config Qt5Widgets --cflags` -DQT_NO_VERSION_TAGGING
 # environment
 CHROME_DESKTOP = code-url-handler.desktop
 # environment
@@ -263,7 +264,7 @@ bin/camapp: bin-int/main.o
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 20):
-	$(CC) $(LINKERFLAGS) $(INTBUILDDIR)/main.o -o $(BUILDDIR)/$(APPNAME)
+	$(CC) $(INTBUILDDIR)/main.o $(LINKERFLAGS) -o $(BUILDDIR)/$(APPNAME)
 
 all: force bin/camapp
 #  Command line target.
@@ -278,6 +279,7 @@ all: force bin/camapp
 
 # Not a target:
 .SUFFIXES:
+ 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -285,7 +287,6 @@ all: force bin/camapp
 # makefile (from 'makefile', line 14)
 debug: BUILDFLAGS += -D_DEBUG
 debug: all
- 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -295,7 +296,7 @@ debug: all
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-13 10:49:35.291633969
+#  Last modified 2022-06-13 11:17:09.46180502
 #  File has been updated.
 #  Successfully updated.
 
@@ -359,6 +360,6 @@ src/main.cpp:
 # strcache performance: lookups = 40 / hit rate = 45%
 # hash-table stats:
 # Load=22/8192=0%, Rehash=0, Collisions=1/40=2%
-# Finished Make data base on Mon Jun 13 10:49:45 2022
+# Finished Make data base on Mon Jun 13 11:19:18 2022
 
  

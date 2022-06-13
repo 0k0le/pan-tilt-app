@@ -1,7 +1,6 @@
 make --dry-run --keep-going --print-directory
 make: Entering directory '/home/okole/Projects/camera-example-application'
 mkdir -p bin bin-int
- 
 echo Build System Exiting
 make: Leaving directory '/home/okole/Projects/camera-example-application'
  

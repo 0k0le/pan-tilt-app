@@ -4,8 +4,8 @@
 APPNAME=camapp
 
 CC=g++
-BUILDFLAGS=-Wall -Wextra -pedantic -std=c++2a -c -O2 -I src/include `pkg-config Qt5Gui --cflags`
-LINKERFLAGS=`pkg-config Qt5Gui --libs`
+BUILDFLAGS=-Wall -Wextra -pedantic -fpic -std=c++2a -c -O2 -I src/include `pkg-config Qt5Widgets --cflags` -DQT_NO_VERSION_TAGGING
+LINKERFLAGS=`pkg-config Qt5Widgets --libs`
 
 SRCDIR=src
 BUILDDIR=bin
@@ -17,7 +17,7 @@ all: force $(BUILDDIR)/$(APPNAME)
 	@echo Build System Exiting
 
 $(BUILDDIR)/$(APPNAME): $(INTBUILDDIR)/main.o
-	$(CC) $(LINKERFLAGS) $(INTBUILDDIR)/main.o -o $(BUILDDIR)/$(APPNAME)
+	$(CC) $(INTBUILDDIR)/main.o $(LINKERFLAGS) -o $(BUILDDIR)/$(APPNAME)
 
 $(INTBUILDDIR)/main.o: $(SRCDIR)/main.cpp
 	$(CC) $(SRCDIR)/main.cpp -o $(INTBUILDDIR)/main.o $(BUILDFLAGS)
