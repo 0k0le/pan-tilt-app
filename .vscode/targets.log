@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Jun 13 11:41:46 2022
+# Make data base, printed on Mon Jun 13 13:25:20 2022
 
 # Variables
 
@@ -19,7 +19,6 @@ GNUMAKEFLAGS :=
 # environment
 DESKTOP_SESSION = gnome
 # default
- 
 .SHELLFLAGS := -c
 # environment
 XDG_SESSION_CLASS = user
@@ -70,7 +69,7 @@ BUILDDIR = bin
 # environment
 MANAGERPID = 5200
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-e2928651-2e99-4c8a-b4fc-fad15102594d.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-774a3136-6f55-4836-8a83-9054213a7f8d.sock
 # environment
 VSCODE_CWD = /home/okole
 # default
@@ -102,7 +101,7 @@ XDG_SESSION_DESKTOP = gnome
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 17892
+GIO_LAUNCHED_DESKTOP_FILE_PID = 36978
 # automatic
 %F = $(notdir $%)
 # environment
@@ -232,9 +231,8 @@ GJS_DEBUG_OUTPUT = stderr
 # environment
 LANG = C
 # environment
-VSCODE_PID = 17892
+VSCODE_PID = 36978
 # variable set hash-table stats:
- 
 # Load=111/1024=11%, Rehash=0, Collisions=18/150=12%
 
 # Pattern-specific Variable Values
@@ -291,6 +289,7 @@ debug: all
 #  Modification time never checked.
 #  File has not been updated.
 # variable set hash-table stats:
+ 
 # Load=1/32=3%, Rehash=0, Collisions=0/2=0%
 
 # Not a target:
@@ -323,7 +322,6 @@ force:
 # automatic
 # ? := 
 # variable set hash-table stats:
- 
 # Load=8/32=25%, Rehash=0, Collisions=1/11=9%
 #  recipe to execute (from 'makefile', line 34):
 	mkdir -p bin bin-int
@@ -374,6 +372,6 @@ bin-int/pylon-video.o: src/pylon-video.cpp
 # strcache performance: lookups = 44 / hit rate = 45%
 # hash-table stats:
 # Load=24/8192=0%, Rehash=0, Collisions=1/44=2%
-# Finished Make data base on Mon Jun 13 11:41:46 2022
+# Finished Make data base on Mon Jun 13 13:25:20 2022
 
  
