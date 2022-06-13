@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Jun 13 11:19:18 2022
+# Make data base, printed on Mon Jun 13 11:41:46 2022
 
 # Variables
 
@@ -19,9 +19,9 @@ GNUMAKEFLAGS :=
 # environment
 DESKTOP_SESSION = gnome
 # default
+ 
 .SHELLFLAGS := -c
 # environment
- 
 XDG_SESSION_CLASS = user
 # environment
 XDG_SESSION_TYPE = x11
@@ -168,7 +168,7 @@ LESS = -R
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # makefile (from 'makefile', line 8)
-LINKERFLAGS = `pkg-config Qt5Widgets --libs`
+LINKERFLAGS = `pkg-config Qt5Widgets --libs` `pylon-config --libs --libs-rpath`
 # environment
 GENICAM_GENTL64_PATH = :/opt/pylon/lib/gentlproducer/gtl:/opt/pylon/lib/pylonCXP/bin/
 # default
@@ -218,7 +218,7 @@ GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # default
 SUFFIXES := 
 # makefile (from 'makefile', line 7)
-BUILDFLAGS = -Wall -Wextra -pedantic -fpic -std=c++2a -c -O2 -I src/include `pkg-config Qt5Widgets --cflags` -DQT_NO_VERSION_TAGGING
+BUILDFLAGS = -Wall -Wextra -pedantic -fpic -std=c++2a -c -O2 -I src/include `pkg-config Qt5Widgets --cflags` -DQT_NO_VERSION_TAGGING -msse -msse2 -msse3 -mfpmath=sse `pylon-config --cflags`
 # environment
 CHROME_DESKTOP = code-url-handler.desktop
 # environment
@@ -234,7 +234,8 @@ LANG = C
 # environment
 VSCODE_PID = 17892
 # variable set hash-table stats:
-# Load=111/1024=11%, Rehash=0, Collisions=16/147=11%
+ 
+# Load=111/1024=11%, Rehash=0, Collisions=18/150=12%
 
 # Pattern-specific Variable Values
 
@@ -259,12 +260,12 @@ bin-int/main.o: src/main.cpp
 #  recipe to execute (from 'makefile', line 23):
 	$(CC) $(SRCDIR)/main.cpp -o $(INTBUILDDIR)/main.o $(BUILDFLAGS)
 
-bin/camapp: bin-int/main.o
+bin/camapp: bin-int/main.o bin-int/pylon-video.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 20):
-	$(CC) $(INTBUILDDIR)/main.o $(LINKERFLAGS) -o $(BUILDDIR)/$(APPNAME)
+	$(CC) $(INTBUILDDIR)/main.o $(INTBUILDDIR)/pylon-video.o $(LINKERFLAGS) -o $(BUILDDIR)/$(APPNAME)
 
 all: force bin/camapp
 #  Command line target.
@@ -279,7 +280,6 @@ all: force bin/camapp
 
 # Not a target:
 .SUFFIXES:
- 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -296,7 +296,7 @@ debug: all
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-13 11:17:09.46180502
+#  Last modified 2022-06-13 11:41:44.394740099
 #  File has been updated.
 #  Successfully updated.
 
@@ -323,8 +323,9 @@ force:
 # automatic
 # ? := 
 # variable set hash-table stats:
+ 
 # Load=8/32=25%, Rehash=0, Collisions=1/11=9%
-#  recipe to execute (from 'makefile', line 31):
+#  recipe to execute (from 'makefile', line 34):
 	mkdir -p bin bin-int
 
 # Not a target:
@@ -333,11 +334,17 @@ force:
 #  Modification time never checked.
 #  File has not been updated.
 
+# Not a target:
+src/pylon-video.cpp:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
 clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 28):
+#  recipe to execute (from 'makefile', line 31):
 	rm -rf bin/* bin-int/*
 
 # Not a target:
@@ -346,20 +353,27 @@ src/main.cpp:
 #  Modification time never checked.
 #  File has not been updated.
 
+bin-int/pylon-video.o: src/pylon-video.cpp
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'makefile', line 26):
+	$(CC) $(SRCDIR)/pylon-video.cpp -o $(INTBUILDDIR)/pylon-video.o $(BUILDFLAGS)
+
 # files hash-table stats:
-# Load=10/1024=1%, Rehash=0, Collisions=0/32=0%
+# Load=12/1024=1%, Rehash=0, Collisions=0/37=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 22 / storage = 181 B / avg = 8 B
-# current buf: size = 8162 B / used = 181 B / count = 22 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 24 / storage = 223 B / avg = 9 B
+# current buf: size = 8162 B / used = 223 B / count = 24 / avg = 9 B
 
-# strcache performance: lookups = 40 / hit rate = 45%
+# strcache performance: lookups = 44 / hit rate = 45%
 # hash-table stats:
-# Load=22/8192=0%, Rehash=0, Collisions=1/40=2%
-# Finished Make data base on Mon Jun 13 11:19:18 2022
+# Load=24/8192=0%, Rehash=0, Collisions=1/44=2%
+# Finished Make data base on Mon Jun 13 11:41:46 2022
 
  
