@@ -4,8 +4,8 @@
 APPNAME=camapp
 
 CC=g++
-BUILDFLAGS=-Wall -Wextra -pedantic -std=c++2a -c -O2 -I src/include
-LINKERFLAGS=
+BUILDFLAGS=-Wall -Wextra -pedantic -std=c++2a -c -O2 -I src/include `pkg-config Qt5Gui --cflags`
+LINKERFLAGS=`pkg-config Qt5Gui --libs`
 
 SRCDIR=src
 BUILDDIR=bin

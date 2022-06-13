@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Jun 13 10:31:24 2022
+# Make data base, printed on Mon Jun 13 10:49:45 2022
 
 # Variables
 
@@ -167,7 +167,7 @@ LESS = -R
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # makefile (from 'makefile', line 8)
-LINKERFLAGS = 
+LINKERFLAGS = `pkg-config Qt5Gui --libs`
 # environment
 GENICAM_GENTL64_PATH = :/opt/pylon/lib/gentlproducer/gtl:/opt/pylon/lib/pylonCXP/bin/
 # default
@@ -217,7 +217,7 @@ GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # default
 SUFFIXES := 
 # makefile (from 'makefile', line 7)
-BUILDFLAGS = -Wall -Wextra -pedantic -std=c++2a -c -O2 -I src/include
+BUILDFLAGS = -Wall -Wextra -pedantic -std=c++2a -c -O2 -I src/include `pkg-config Qt5Gui --cflags`
 # environment
 CHROME_DESKTOP = code-url-handler.desktop
 # environment
@@ -241,9 +241,9 @@ VSCODE_PID = 17892
 
 # Directories
 
-# . (device 2081, inode 2950725): 10 files, no impossibilities.
+# . (device 2081, inode 2950725): 11 files, no impossibilities.
 
-# 10 files, no impossibilities in 1 directories.
+# 11 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -285,6 +285,7 @@ all: force bin/camapp
 # makefile (from 'makefile', line 14)
 debug: BUILDFLAGS += -D_DEBUG
 debug: all
+ 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -294,8 +295,7 @@ debug: all
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-13 10:31:04.765567221
- 
+#  Last modified 2022-06-13 10:49:35.291633969
 #  File has been updated.
 #  Successfully updated.
 
@@ -353,12 +353,12 @@ src/main.cpp:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 21 / storage = 170 B / avg = 8 B
-# current buf: size = 8162 B / used = 170 B / count = 21 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 22 / storage = 181 B / avg = 8 B
+# current buf: size = 8162 B / used = 181 B / count = 22 / avg = 8 B
 
-# strcache performance: lookups = 39 / hit rate = 46%
+# strcache performance: lookups = 40 / hit rate = 45%
 # hash-table stats:
-# Load=21/8192=0%, Rehash=0, Collisions=1/39=3%
-# Finished Make data base on Mon Jun 13 10:31:24 2022
+# Load=22/8192=0%, Rehash=0, Collisions=1/40=2%
+# Finished Make data base on Mon Jun 13 10:49:45 2022
 
  
