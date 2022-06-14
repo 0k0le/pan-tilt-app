@@ -17,8 +17,9 @@
 #include <QVBoxLayout>
 
 int main(int argc, char** argv) {
-    Recorder recorder("40125042");
+    Recorder *recorder = new Recorder("40125042");
 
+    delete recorder;
     return 0;
     //QApplication app(argc, argv);
     
