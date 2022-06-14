@@ -18,48 +18,45 @@ Recorder::Recorder(const char* const cameraSerial, int framesPerSecond, int qual
 }
 
 Recorder::~Recorder() {
-    if(_videoWriter != nullptr) 
-        delete _videoWriter;
-
-    if(_camera != nullptr)
+    if(_camera != nullptr) {
+        _camera->Close();
         delete _camera;
+    }
 
     PylonTerminate();
+}
+
+DeviceInfoList_t::const_iterator Recorder::FindCamera(const char* const cameraSerial, CTlFactory& TlFactory, DeviceInfoList_t& lstDevices) {
+    TlFactory.EnumerateDevices(lstDevices); // Get list of devices on network
+
+    DeviceInfoList_t::const_iterator it; // iterate through devices to find one that matches serial number
+    if(!lstDevices.empty()) {
+        for(it = lstDevices.begin(); it != lstDevices.end(); ++it) {
+            M_PRINT("Camera found on network: %s", it->GetSerialNumber().c_str());
+            if(strcmp(it->GetSerialNumber().c_str(), cameraSerial) == 0) {
+                return it;
+            }
+        }
+    }
+
+    return nullptr;
 }
 
 void Recorder::InitializeCamera(const char* const cameraSerial) {
     // Initialize Pylon API
     M_PRINT("Initializing Pylon/Basler camera API");
     PylonInitialize();
+    
+    CTlFactory& TlFactory = CTlFactory::GetInstance(); // User transport layer factory to communicate with basler devices over transport layer
+    DeviceInfoList_t lstDevices;
 
     try {
-        // Check for video support
-        M_PRINT("Checking for required camera features");
-        if(!CVideoWriter::IsSupported())
-            throw GENERIC_EXCEPTION("VideoWriter is not supported, have you installed the MPEG-4 supplementary package from Basler website?");
-
-        _videoWriter = new CVideoWriter;
-
         // Connect to camera
-        M_PRINT("Connecting to camera: %s", cameraSerial);
-
-        bool cameraFound = false;
-
-        CTlFactory& TlFactory = CTlFactory::GetInstance();
-        DeviceInfoList_t lstDevices;
-        TlFactory.EnumerateDevices(lstDevices);
-        DeviceInfoList_t::const_iterator it;
-        if(!lstDevices.empty()) {
-            for(it = lstDevices.begin(); it != lstDevices.end(); ++it) {
-                M_PRINT("Camera found on network: %s", it->GetSerialNumber().c_str());
-                if(strcmp(it->GetSerialNumber().c_str(), cameraSerial) == 0) {
-                    cameraFound = true;
-                    break;
-                }
-            }
-        }
+        M_PRINT("Locating camera: %s", cameraSerial);
         
-        if(!cameraFound)
+        DeviceInfoList_t::const_iterator it = FindCamera(cameraSerial, TlFactory, lstDevices);
+
+        if(it == nullptr)
             throw GENERIC_EXCEPTION("Failed to find camera with serial: %s", cameraSerial);
 
         M_PRINT("Connecting to: %s", cameraSerial);
@@ -74,41 +71,34 @@ void Recorder::InitializeCamera(const char* const cameraSerial) {
         // Get handle on camera properties
         CIntegerParameter width(_camera->GetNodeMap(), "Width");
         CIntegerParameter height(_camera->GetNodeMap(), "Height");
+        CIntegerParameter offsetX(_camera->GetNodeMap(), "OffsetX");
+        CIntegerParameter offsetY(_camera->GetNodeMap(), "OffsetY");
         CEnumParameter pixelFormat(_camera->GetNodeMap(), "PixelFormat");
 
         // Set camera properties
         width.TrySetValue(640, IntegerValueCorrection_Nearest);
         height.TrySetValue(480, IntegerValueCorrection_Nearest);
-
-        CPixelTypeMapper pixelTypeMapper(&pixelFormat);
-        EPixelType pixelType = pixelTypeMapper.GetPylonPixelTypeFromNodeValue(pixelFormat.GetIntValue());
-
-        // Apply camera configuration
-        _videoWriter->SetParameter(
-            (uint32_t) width.GetValue(),
-            (uint32_t) height.GetValue(),
-            pixelType,
-            _fps,
-            _qual           
-        );
+        offsetX.TrySetToMinimum();
+        offsetY.TrySetToMinimum();
+        pixelFormat.SetIntValue(PixelType_RGB8packed);
 
     } catch (const GenericException& e) {
         M_FATAL("An exception occured. %s", e.GetDescription());
     }
 
-
     // return
 }
 
-bool StartRecording() {
+bool Recorder::StartRecording() {
     // Launch record thread
     M_PRINT("Launching recorder thread");
 
     // return
 }
 
-void RecordThread(void *data) {
-    
+void Recorder::RecordThread(void *data) {
+    RThreadData *baslerInfo = (RThreadData *)data;    
+
     //WHILE
 
     // Capture image

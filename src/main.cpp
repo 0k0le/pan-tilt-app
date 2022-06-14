@@ -19,6 +19,8 @@
 int main(int argc, char** argv) {
     Recorder *recorder = new Recorder("40125042");
 
+    recorder->StartRecording();
+
     delete recorder;
     return 0;
     //QApplication app(argc, argv);
