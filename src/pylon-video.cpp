@@ -10,15 +10,29 @@
 using namespace Pylon;
 using namespace GenApi;
 
+uint8_t Recorder::_imageBuffer[RESX * RESY * BYTES_PER_PIXEL];
+std::mutex Recorder::_mtx;
+
 Recorder::Recorder(const char* const cameraSerial, int framesPerSecond, int quality) {
     _fps = framesPerSecond;
     _qual = quality;
 
+    M_PRINT("Initializing Pylon/Basler camera API");
     InitializeCamera(cameraSerial); // Initialize the camera on startup
 }
 
 Recorder::~Recorder() {
+    M_PRINT("Shutting down recorder");
+
+    // This needs to be first to prevent early deletion
+    if(_recordThread != nullptr) {
+        M_PRINT("Waiting for recorder thread");
+        _recordThread->join();
+        delete _recordThread;
+    }
+
     if(_camera != nullptr) {
+        M_PRINT("Closing camera handle");
         _camera->Close();
         delete _camera;
     }
@@ -44,7 +58,6 @@ DeviceInfoList_t::const_iterator Recorder::FindCamera(const char* const cameraSe
 
 void Recorder::InitializeCamera(const char* const cameraSerial) {
     // Initialize Pylon API
-    M_PRINT("Initializing Pylon/Basler camera API");
     PylonInitialize();
     
     CTlFactory& TlFactory = CTlFactory::GetInstance(); // User transport layer factory to communicate with basler devices over transport layer
@@ -60,7 +73,7 @@ void Recorder::InitializeCamera(const char* const cameraSerial) {
             throw GENERIC_EXCEPTION("Failed to find camera with serial: %s", cameraSerial);
 
         M_PRINT("Connecting to: %s", cameraSerial);
-        _camera = new CInstantCamera(TlFactory.CreateDevice(*it));
+        _camera = new CMyInstantCamera(TlFactory.CreateDevice(*it));
         M_PRINT("Camera connection successful");
 
         _camera->Open();
@@ -76,11 +89,13 @@ void Recorder::InitializeCamera(const char* const cameraSerial) {
         CEnumParameter pixelFormat(_camera->GetNodeMap(), "PixelFormat");
 
         // Set camera properties
-        width.TrySetValue(640, IntegerValueCorrection_Nearest);
-        height.TrySetValue(480, IntegerValueCorrection_Nearest);
+        width.TrySetValue(RESX, IntegerValueCorrection_Nearest);
+        height.TrySetValue(RESY, IntegerValueCorrection_Nearest);
         offsetX.TrySetToMinimum();
         offsetY.TrySetToMinimum();
         pixelFormat.SetIntValue(PixelType_RGB8packed);
+
+        _threadInfo.camera = _camera;
 
     } catch (const GenericException& e) {
         M_FATAL("An exception occured. %s", e.GetDescription());
@@ -89,22 +104,63 @@ void Recorder::InitializeCamera(const char* const cameraSerial) {
     // return
 }
 
+void Recorder::RecordThread(void *data) {
+    RThreadData *baslerInfo = (RThreadData *)data;
+
+    CLock& lock = baslerInfo->camera->RetLock();
+
+    M_PRINT("Initiating grabber");
+    lock.Lock();
+    baslerInfo->camera->StartGrabbing(5);
+    lock.Unlock();
+
+    CGrabResultPtr ptrGrabResult;
+
+    while(1) {
+        lock.Lock();
+        if(!baslerInfo->camera->IsGrabbing())
+            break;
+
+        ONLY_DEBUG(M_PRINT("Retrieving image"));
+        baslerInfo->camera->RetrieveResult(5000, ptrGrabResult, TimeoutHandling_Return);
+
+        ONLY_DEBUG(M_PRINT("Processing result"));
+        if(ptrGrabResult->GrabSucceeded()) {
+            ONLY_DEBUG(M_PRINT("SizeX: %d", ptrGrabResult->GetWidth()));
+            ONLY_DEBUG(M_PRINT("SizeY: %d", ptrGrabResult->GetHeight()));
+            ONLY_DEBUG(M_PRINT("Buffer Size: %ld", ptrGrabResult->GetBufferSize()));
+
+            _mtx.lock();
+            memcpy(_imageBuffer, ptrGrabResult->GetBuffer(), RESX * RESY * BYTES_PER_PIXEL);
+            _mtx.unlock();
+        } else {
+            M_ERR("Failed to grab image");
+            break;
+        }
+
+        lock.Unlock();
+    }
+
+    lock.Unlock();
+}
+
 bool Recorder::StartRecording() {
     // Launch record thread
     M_PRINT("Launching recorder thread");
 
-    // return
+    _recordThread = new std::thread(RecordThread, (void *)&_threadInfo);
+    if(_recordThread == nullptr)
+        return false;
+
+    return true;
 }
 
-void Recorder::RecordThread(void *data) {
-    RThreadData *baslerInfo = (RThreadData *)data;    
+uint8_t* Recorder::GetFrame() {
+    static uint8_t imageBuffer[RESX * RESY * BYTES_PER_PIXEL];
 
-    //WHILE
+    _mtx.lock();
+    memcpy(imageBuffer, _imageBuffer, RESX * RESY * BYTES_PER_PIXEL);
+    _mtx.unlock();
 
-    // Capture image
-
-    // Write image to list
-    
-    //END WHILE
-
+    return imageBuffer;
 }

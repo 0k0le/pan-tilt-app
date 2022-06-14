@@ -5,8 +5,9 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
+ 
 
-# Make data base, printed on Mon Jun 13 13:25:20 2022
+# Make data base, printed on Tue Jun 14 13:54:47 2022
 
 # Variables
 
@@ -167,7 +168,7 @@ LESS = -R
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # makefile (from 'makefile', line 8)
-LINKERFLAGS = `pkg-config Qt5Widgets --libs` `pylon-config --libs --libs-rpath`
+LINKERFLAGS = `pkg-config Qt5Widgets --libs` `pylon-config --libs --libs-rpath` -lpthread
 # environment
 GENICAM_GENTL64_PATH = :/opt/pylon/lib/gentlproducer/gtl:/opt/pylon/lib/pylonCXP/bin/
 # default
@@ -202,6 +203,7 @@ APPNAME = camapp
 QT_ACCESSIBILITY = 1
 # environment
 DEFAULTS_PATH = /usr/share/gconf/gnome.default.path
+ 
 # default
 MAKEFILES := 
 # automatic
@@ -289,13 +291,13 @@ debug: all
 #  Modification time never checked.
 #  File has not been updated.
 # variable set hash-table stats:
- 
 # Load=1/32=3%, Rehash=0, Collisions=0/2=0%
 
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-13 11:41:44.394740099
+ 
+#  Last modified 2022-06-14 13:54:41.572942892
 #  File has been updated.
 #  Successfully updated.
 
@@ -368,10 +370,11 @@ bin-int/pylon-video.o: src/pylon-video.cpp
 
 # strcache buffers: 1 (0) / strings = 24 / storage = 223 B / avg = 9 B
 # current buf: size = 8162 B / used = 223 B / count = 24 / avg = 9 B
+ 
 
 # strcache performance: lookups = 44 / hit rate = 45%
 # hash-table stats:
 # Load=24/8192=0%, Rehash=0, Collisions=1/44=2%
-# Finished Make data base on Mon Jun 13 13:25:20 2022
+# Finished Make data base on Tue Jun 14 13:54:47 2022
 
  

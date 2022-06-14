@@ -5,7 +5,7 @@ APPNAME=camapp
 
 CC=g++
 BUILDFLAGS=-Wall -Wextra -pedantic -fpic -std=c++2a -c -O2 -I src/include `pkg-config Qt5Widgets --cflags` -DQT_NO_VERSION_TAGGING -msse -msse2 -msse3 -mfpmath=sse `pylon-config --cflags`
-LINKERFLAGS=`pkg-config Qt5Widgets --libs` `pylon-config --libs --libs-rpath`
+LINKERFLAGS=`pkg-config Qt5Widgets --libs` `pylon-config --libs --libs-rpath` -lpthread
 
 SRCDIR=src
 BUILDDIR=bin
