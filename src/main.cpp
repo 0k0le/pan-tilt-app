@@ -5,6 +5,7 @@
 
 // Standard includes
 #include <cstdlib>
+#include <unistd.h>
 
 // local includes
 #include <macros.hpp>
@@ -15,6 +16,8 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QtGui>
+#include <QLabel>
 
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
@@ -23,43 +26,24 @@ int main(int argc, char** argv) {
 
     recorder->StartRecording();
 
-    // Horizontal layout with 3 buttons
-    QHBoxLayout *hLayout = new QHBoxLayout;
-    QPushButton *b1 = new QPushButton("A");
-    QPushButton *b2 = new QPushButton("B");
-    QPushButton *b3 = new QPushButton("C");
-    hLayout->addWidget(b1);
-    hLayout->addWidget(b2);
-    hLayout->addWidget(b3);
+    QImage img(RESX, RESY, QImage::Format_RGB888);
+    img.fill(QColor(Qt::red).rgb());
 
-    // Vertical layout with 3 buttons
-    QVBoxLayout *vLayout = new QVBoxLayout;
-    QPushButton *b4 = new QPushButton("D");
-    QPushButton *b5 = new QPushButton("E");
-    QPushButton *b6 = new QPushButton("F");
-    vLayout->addWidget(b4);
-    vLayout->addWidget(b5);
-    vLayout->addWidget(b6);
+    sleep(2);
 
-    // Outer Layer
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    
-    // Add the previous two inner layouts
-    mainLayout->addLayout(hLayout);
-    mainLayout->addLayout(vLayout);
+    int arrpos = 0;
+    uint8_t* buf = recorder->GetFrame();
+    for(int y = 0; y < RESY; y++) {
+        for(int x = 0; x < RESX; x++) {
+            //M_PRINT("R(%d) G(%d) B(%d)", buf[arrpos], buf[arrpos+1], buf[arrpos+2]);
+            img.setPixel(x, y, qRgb(0xFF & buf[arrpos], 0xFF & (int)buf[arrpos+1], 0xFF & (int)buf[arrpos+2]));
+            arrpos += 3;
+        }
+    }
 
-    // Create a widget
-    QWidget *w = new QWidget();
-    
-    // Set the outer layout as a main layout 
-    // of the widget
-    w->setLayout(mainLayout);
-
-    // Window title
-    w->setWindowTitle("layouts");
-    
-    // Display
-    w->show();
+    QLabel l;
+    l.setPixmap(QPixmap::fromImage(img));
+    l.show();
 
     int ret = app.exec();
 

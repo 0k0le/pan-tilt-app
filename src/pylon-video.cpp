@@ -121,6 +121,7 @@ void Recorder::RecordThread(void *data) {
         if(!baslerInfo->camera->IsGrabbing())
             break;
 
+        _mtx.lock();
         ONLY_DEBUG(M_PRINT("Retrieving image"));
         baslerInfo->camera->RetrieveResult(5000, ptrGrabResult, TimeoutHandling_Return);
 
@@ -130,13 +131,13 @@ void Recorder::RecordThread(void *data) {
             ONLY_DEBUG(M_PRINT("SizeY: %d", ptrGrabResult->GetHeight()));
             ONLY_DEBUG(M_PRINT("Buffer Size: %ld", ptrGrabResult->GetBufferSize()));
 
-            _mtx.lock();
             memcpy(_imageBuffer, ptrGrabResult->GetBuffer(), RESX * RESY * BYTES_PER_PIXEL);
-            _mtx.unlock();
         } else {
             M_ERR("Failed to grab image");
             break;
         }
+
+        _mtx.unlock();
 
         lock.Unlock();
     }
