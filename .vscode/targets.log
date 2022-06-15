@@ -5,9 +5,8 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
- 
 
-# Make data base, printed on Tue Jun 14 13:54:47 2022
+# Make data base, printed on Wed Jun 15 12:49:17 2022
 
 # Variables
 
@@ -21,6 +20,7 @@ GNUMAKEFLAGS :=
 DESKTOP_SESSION = gnome
 # default
 .SHELLFLAGS := -c
+ 
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -168,7 +168,7 @@ LESS = -R
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # makefile (from 'makefile', line 8)
-LINKERFLAGS = `pkg-config Qt5Widgets --libs` `pylon-config --libs --libs-rpath` -lpthread
+LINKERFLAGS = `pkg-config Qt5Widgets --libs` `pylon-config --libs --libs-rpath` -lpthread `pkg-config Qt5Gui --libs` `pkg-config Qt5Core --libs`
 # environment
 GENICAM_GENTL64_PATH = :/opt/pylon/lib/gentlproducer/gtl:/opt/pylon/lib/pylonCXP/bin/
 # default
@@ -203,7 +203,6 @@ APPNAME = camapp
 QT_ACCESSIBILITY = 1
 # environment
 DEFAULTS_PATH = /usr/share/gconf/gnome.default.path
- 
 # default
 MAKEFILES := 
 # automatic
@@ -219,7 +218,7 @@ GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # default
 SUFFIXES := 
 # makefile (from 'makefile', line 7)
-BUILDFLAGS = -Wall -Wextra -pedantic -fpic -std=c++2a -c -O2 -I src/include `pkg-config Qt5Widgets --cflags` -DQT_NO_VERSION_TAGGING -msse -msse2 -msse3 -mfpmath=sse `pylon-config --cflags`
+BUILDFLAGS = -Wall -Wextra -pedantic -fpic -std=c++2a -c -O2 -I src/include `pkg-config Qt5Widgets --cflags` -DQT_NO_VERSION_TAGGING -msse -msse2 -msse3 -mfpmath=sse `pylon-config --cflags` `pkg-config Qt5Gui --cflags` `pkg-config Qt5Core --cflags`
 # environment
 CHROME_DESKTOP = code-url-handler.desktop
 # environment
@@ -235,7 +234,7 @@ LANG = C
 # environment
 VSCODE_PID = 36978
 # variable set hash-table stats:
-# Load=111/1024=11%, Rehash=0, Collisions=18/150=12%
+# Load=111/1024=11%, Rehash=0, Collisions=20/153=13%
 
 # Pattern-specific Variable Values
 
@@ -257,15 +256,15 @@ bin-int/main.o: src/main.cpp
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 23):
+#  recipe to execute (from 'makefile', line 26):
 	$(CC) $(SRCDIR)/main.cpp -o $(INTBUILDDIR)/main.o $(BUILDFLAGS)
 
-bin/camapp: bin-int/main.o bin-int/pylon-video.o
+bin/camapp: bin-int/main.o bin-int/pylon-video.o bin-int/gui.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 20):
-	$(CC) $(INTBUILDDIR)/main.o $(INTBUILDDIR)/pylon-video.o $(LINKERFLAGS) -o $(BUILDDIR)/$(APPNAME)
+	$(CC) $(INTBUILDDIR)/main.o $(INTBUILDDIR)/pylon-video.o $(INTBUILDDIR)/gui.o $(LINKERFLAGS) -o $(BUILDDIR)/$(APPNAME)
 
 all: force bin/camapp
 #  Command line target.
@@ -282,6 +281,7 @@ all: force bin/camapp
 .SUFFIXES:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
+ 
 #  File has not been updated.
 
 # makefile (from 'makefile', line 14)
@@ -296,8 +296,7 @@ debug: all
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
- 
-#  Last modified 2022-06-14 13:54:41.572942892
+#  Last modified 2022-06-15 12:49:16.410467043
 #  File has been updated.
 #  Successfully updated.
 
@@ -325,11 +324,17 @@ force:
 # ? := 
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=1/11=9%
-#  recipe to execute (from 'makefile', line 34):
+#  recipe to execute (from 'makefile', line 37):
 	mkdir -p bin bin-int
 
 # Not a target:
 .DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+src/gui.cpp:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -344,7 +349,7 @@ clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 31):
+#  recipe to execute (from 'makefile', line 34):
 	rm -rf bin/* bin-int/*
 
 # Not a target:
@@ -353,28 +358,34 @@ src/main.cpp:
 #  Modification time never checked.
 #  File has not been updated.
 
+bin-int/gui.o: src/gui.cpp
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'makefile', line 23):
+	$(CC) $(SRCDIR)/gui.cpp -o $(INTBUILDDIR)/gui.o $(BUILDFLAGS)
+
 bin-int/pylon-video.o: src/pylon-video.cpp
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 26):
+#  recipe to execute (from 'makefile', line 29):
 	$(CC) $(SRCDIR)/pylon-video.cpp -o $(INTBUILDDIR)/pylon-video.o $(BUILDFLAGS)
 
 # files hash-table stats:
-# Load=12/1024=1%, Rehash=0, Collisions=0/37=0%
+# Load=14/1024=1%, Rehash=0, Collisions=0/42=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 24 / storage = 223 B / avg = 9 B
-# current buf: size = 8162 B / used = 223 B / count = 24 / avg = 9 B
- 
+# strcache buffers: 1 (0) / strings = 26 / storage = 249 B / avg = 9 B
+# current buf: size = 8162 B / used = 249 B / count = 26 / avg = 9 B
 
-# strcache performance: lookups = 44 / hit rate = 45%
+# strcache performance: lookups = 48 / hit rate = 45%
 # hash-table stats:
-# Load=24/8192=0%, Rehash=0, Collisions=1/44=2%
-# Finished Make data base on Tue Jun 14 13:54:47 2022
+# Load=26/8192=0%, Rehash=0, Collisions=1/48=2%
+# Finished Make data base on Wed Jun 15 12:49:17 2022
 
  

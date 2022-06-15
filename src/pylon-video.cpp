@@ -12,6 +12,8 @@ using namespace GenApi;
 
 uint8_t Recorder::_imageBuffer[RESX * RESY * BYTES_PER_PIXEL];
 std::mutex Recorder::_mtx;
+std::mutex Recorder::_closeThreadMtx;
+bool Recorder::_closeThread;
 
 Recorder::Recorder(const char* const cameraSerial, int framesPerSecond, int quality) {
     _fps = framesPerSecond;
@@ -27,6 +29,11 @@ Recorder::~Recorder() {
     // This needs to be first to prevent early deletion
     if(_recordThread != nullptr) {
         M_PRINT("Waiting for recorder thread");
+        
+        _closeThreadMtx.lock();
+        _closeThread = true;
+        _closeThreadMtx.unlock();
+
         _recordThread->join();
         delete _recordThread;
     }
@@ -60,6 +67,8 @@ void Recorder::InitializeCamera(const char* const cameraSerial) {
     // Initialize Pylon API
     PylonInitialize();
     
+    _closeThread = false;
+
     CTlFactory& TlFactory = CTlFactory::GetInstance(); // User transport layer factory to communicate with basler devices over transport layer
     DeviceInfoList_t lstDevices;
 
@@ -111,7 +120,7 @@ void Recorder::RecordThread(void *data) {
 
     M_PRINT("Initiating grabber");
     lock.Lock();
-    baslerInfo->camera->StartGrabbing(5);
+    baslerInfo->camera->StartGrabbing();
     lock.Unlock();
 
     CGrabResultPtr ptrGrabResult;
@@ -121,7 +130,11 @@ void Recorder::RecordThread(void *data) {
         if(!baslerInfo->camera->IsGrabbing())
             break;
 
-        _mtx.lock();
+        _closeThreadMtx.lock();
+        if(_closeThread == true)
+            break;
+        _closeThreadMtx.unlock();
+
         ONLY_DEBUG(M_PRINT("Retrieving image"));
         baslerInfo->camera->RetrieveResult(5000, ptrGrabResult, TimeoutHandling_Return);
 
@@ -131,17 +144,18 @@ void Recorder::RecordThread(void *data) {
             ONLY_DEBUG(M_PRINT("SizeY: %d", ptrGrabResult->GetHeight()));
             ONLY_DEBUG(M_PRINT("Buffer Size: %ld", ptrGrabResult->GetBufferSize()));
 
+            _mtx.lock();
             memcpy(_imageBuffer, ptrGrabResult->GetBuffer(), RESX * RESY * BYTES_PER_PIXEL);
+            _mtx.unlock();
         } else {
             M_ERR("Failed to grab image");
             break;
         }
 
-        _mtx.unlock();
-
         lock.Unlock();
     }
 
+    _closeThreadMtx.unlock();
     lock.Unlock();
 }
 

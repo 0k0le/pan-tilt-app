@@ -11,8 +11,8 @@
 #include <thread>
 #include <mutex>
 
-#define RESX 640
-#define RESY 480
+#define RESX 1280
+#define RESY 720
 #define BYTES_PER_PIXEL 3
 
 using namespace Pylon;
@@ -50,9 +50,11 @@ class Recorder {
         
         std::thread *_recordThread = nullptr;
         static std::mutex _mtx;
+        static std::mutex _closeThreadMtx;
 
         int _fps;
         int _qual;
 
+        static bool _closeThread;
         static uint8_t _imageBuffer[RESX * RESY * BYTES_PER_PIXEL];
 };

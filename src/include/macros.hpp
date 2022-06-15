@@ -1,3 +1,8 @@
+/*
+ * Matthew Todd Geiger
+ * macros.hpp
+ */
+
 #pragma once
 
 #include <cstdio>
