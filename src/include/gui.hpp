@@ -20,6 +20,4 @@ public:
     QLabel* l;
 
     void run(); // <-- you missed this
-private slots: // <-- no need to make this slot public
-    void handleTimeout(); // <-- why would you make it static?!
 };

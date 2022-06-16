@@ -149,7 +149,6 @@ void Recorder::RecordThread(void *data) {
             _mtx.unlock();
         } else {
             M_ERR("Failed to grab image");
-            break;
         }
 
         lock.Unlock();

@@ -20,7 +20,8 @@ $(BUILDDIR)/$(APPNAME): $(INTBUILDDIR)/main.o $(INTBUILDDIR)/pylon-video.o $(INT
 	$(CC) $(INTBUILDDIR)/main.o $(INTBUILDDIR)/pylon-video.o $(INTBUILDDIR)/gui.o $(LINKERFLAGS) -o $(BUILDDIR)/$(APPNAME)
 
 $(INTBUILDDIR)/gui.o: $(SRCDIR)/gui.cpp
-	$(CC) $(SRCDIR)/gui.cpp -o $(INTBUILDDIR)/gui.o $(BUILDFLAGS)
+	moc $(SRCDIR)/include/gui.hpp > $(SRCDIR)/moc/gui.moc
+	$(CC) $(SRCDIR)/gui.cpp -o $(INTBUILDDIR)/gui.o -I ./ $(BUILDFLAGS)
 
 $(INTBUILDDIR)/main.o: $(SRCDIR)/main.cpp
 	$(CC) $(SRCDIR)/main.cpp -o $(INTBUILDDIR)/main.o $(BUILDFLAGS)

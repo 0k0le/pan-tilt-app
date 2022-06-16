@@ -11,8 +11,8 @@
 #include <thread>
 #include <mutex>
 
-#define RESX 1280
-#define RESY 720
+#define RESX 1600
+#define RESY 900
 #define BYTES_PER_PIXEL 3
 
 using namespace Pylon;

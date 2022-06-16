@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed Jun 15 12:49:17 2022
+# Make data base, printed on Thu Jun 16 09:53:09 2022
 
 # Variables
 
@@ -20,7 +20,6 @@ GNUMAKEFLAGS :=
 DESKTOP_SESSION = gnome
 # default
 .SHELLFLAGS := -c
- 
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -256,7 +255,7 @@ bin-int/main.o: src/main.cpp
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 26):
+#  recipe to execute (from 'makefile', line 27):
 	$(CC) $(SRCDIR)/main.cpp -o $(INTBUILDDIR)/main.o $(BUILDFLAGS)
 
 bin/camapp: bin-int/main.o bin-int/pylon-video.o bin-int/gui.o
@@ -281,7 +280,6 @@ all: force bin/camapp
 .SUFFIXES:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
- 
 #  File has not been updated.
 
 # makefile (from 'makefile', line 14)
@@ -291,12 +289,13 @@ debug: all
 #  Modification time never checked.
 #  File has not been updated.
 # variable set hash-table stats:
+ 
 # Load=1/32=3%, Rehash=0, Collisions=0/2=0%
 
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-15 12:49:16.410467043
+#  Last modified 2022-06-16 09:52:52.603549142
 #  File has been updated.
 #  Successfully updated.
 
@@ -324,7 +323,7 @@ force:
 # ? := 
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=1/11=9%
-#  recipe to execute (from 'makefile', line 37):
+#  recipe to execute (from 'makefile', line 38):
 	mkdir -p bin bin-int
 
 # Not a target:
@@ -349,7 +348,7 @@ clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 34):
+#  recipe to execute (from 'makefile', line 35):
 	rm -rf bin/* bin-int/*
 
 # Not a target:
@@ -363,13 +362,14 @@ bin-int/gui.o: src/gui.cpp
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 23):
-	$(CC) $(SRCDIR)/gui.cpp -o $(INTBUILDDIR)/gui.o $(BUILDFLAGS)
+	moc $(SRCDIR)/include/gui.hpp > $(SRCDIR)/moc/gui.moc
+	$(CC) $(SRCDIR)/gui.cpp -o $(INTBUILDDIR)/gui.o -I ./ $(BUILDFLAGS)
 
 bin-int/pylon-video.o: src/pylon-video.cpp
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 29):
+#  recipe to execute (from 'makefile', line 30):
 	$(CC) $(SRCDIR)/pylon-video.cpp -o $(INTBUILDDIR)/pylon-video.o $(BUILDFLAGS)
 
 # files hash-table stats:
@@ -386,6 +386,6 @@ bin-int/pylon-video.o: src/pylon-video.cpp
 # strcache performance: lookups = 48 / hit rate = 45%
 # hash-table stats:
 # Load=26/8192=0%, Rehash=0, Collisions=1/48=2%
-# Finished Make data base on Wed Jun 15 12:49:17 2022
+# Finished Make data base on Thu Jun 16 09:53:09 2022
 
  
