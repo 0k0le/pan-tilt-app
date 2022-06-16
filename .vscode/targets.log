@@ -6,10 +6,11 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun 16 09:53:09 2022
+# Make data base, printed on Thu Jun 16 12:17:58 2022
 
 # Variables
 
+ 
 # 'override' directive
 GNUMAKEFLAGS := 
 # automatic
@@ -210,6 +211,7 @@ MAKEFILES :=
 PAGER = less
 # environment
 LC_ALL = C
+ 
 # environment
 GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # automatic
@@ -289,16 +291,16 @@ debug: all
 #  Modification time never checked.
 #  File has not been updated.
 # variable set hash-table stats:
- 
 # Load=1/32=3%, Rehash=0, Collisions=0/2=0%
 
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-16 09:52:52.603549142
+#  Last modified 2022-06-16 12:16:47.185899958
 #  File has been updated.
 #  Successfully updated.
 
+ 
 force:
 #  Implicit rule search has not been done.
 #  Implicit/static pattern stem: ''
@@ -382,10 +384,11 @@ bin-int/pylon-video.o: src/pylon-video.cpp
 
 # strcache buffers: 1 (0) / strings = 26 / storage = 249 B / avg = 9 B
 # current buf: size = 8162 B / used = 249 B / count = 26 / avg = 9 B
+ 
 
 # strcache performance: lookups = 48 / hit rate = 45%
 # hash-table stats:
 # Load=26/8192=0%, Rehash=0, Collisions=1/48=2%
-# Finished Make data base on Thu Jun 16 09:53:09 2022
+# Finished Make data base on Thu Jun 16 12:17:58 2022
 
  

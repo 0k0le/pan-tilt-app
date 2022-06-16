@@ -78,7 +78,7 @@ void Recorder::InitializeCamera(const char* const cameraSerial) {
         // Connect to camera
         M_PRINT("Locating camera: %s", cameraSerial);
         
-        DeviceInfoList_t::const_iterator it = FindCamera(cameraSerial, TlFactory, lstDevices);
+        DeviceInfoList_t::const_iterator it = FindCamera(cameraSerial, TlFactory, lstDevices); // Find camera on network
 
         if(it == nullptr)
             throw GENERIC_EXCEPTION("Failed to find camera with serial: %s", cameraSerial);
@@ -122,32 +122,32 @@ void Recorder::RecordThread(void *data) {
 
     M_PRINT("Initiating grabber");
     lock.Lock();
-    baslerInfo->camera->StartGrabbing();
+    baslerInfo->camera->StartGrabbing(); // Start grabbing frames from camera over network
     lock.Unlock();
 
     CGrabResultPtr ptrGrabResult;
 
     while(1) {
         lock.Lock();
-        if(!baslerInfo->camera->IsGrabbing())
+        if(!baslerInfo->camera->IsGrabbing()) // Check if camera is still grabbing
             break;
 
         _closeThreadMtx.lock();
-        if(_closeThread == true)
+        if(_closeThread == true) // Check if a shutdown is happening
             break;
         _closeThreadMtx.unlock();
 
         ONLY_DEBUG(M_PRINT("Retrieving image"));
-        baslerInfo->camera->RetrieveResult(5000, ptrGrabResult, TimeoutHandling_Return);
+        baslerInfo->camera->RetrieveResult(5000, ptrGrabResult, TimeoutHandling_Return); // Retrieve frame with a 5000 ms timeout
 
         ONLY_DEBUG(M_PRINT("Processing result"));
-        if(ptrGrabResult->GrabSucceeded()) {
+        if(ptrGrabResult->GrabSucceeded()) { // If a frame is grabbed...
             ONLY_DEBUG(M_PRINT("SizeX: %d", ptrGrabResult->GetWidth()));
             ONLY_DEBUG(M_PRINT("SizeY: %d", ptrGrabResult->GetHeight()));
             ONLY_DEBUG(M_PRINT("Buffer Size: %ld", ptrGrabResult->GetBufferSize()));
 
             _mtx.lock();
-            memcpy(_imageBuffer, ptrGrabResult->GetBuffer(), RESX * RESY * BYTES_PER_PIXEL);
+            memcpy(_imageBuffer, ptrGrabResult->GetBuffer(), RESX * RESY * BYTES_PER_PIXEL); // Save copy of frame
             _mtx.unlock();
         } else {
             M_ERR("Failed to grab image");
@@ -175,7 +175,7 @@ uint8_t* Recorder::GetFrame() {
     static uint8_t imageBuffer[RESX * RESY * BYTES_PER_PIXEL];
 
     _mtx.lock();
-    memcpy(imageBuffer, _imageBuffer, RESX * RESY * BYTES_PER_PIXEL);
+    memcpy(imageBuffer, _imageBuffer, RESX * RESY * BYTES_PER_PIXEL); // Copy frame
     _mtx.unlock();
 
     return imageBuffer;

@@ -1,6 +1,8 @@
 make --dry-run --keep-going --print-directory
 make: Entering directory '/home/okole/Projects/camera-example-application'
 mkdir -p bin bin-int
+g++ src/main.cpp -o bin-int/main.o -Wall -Wextra -pedantic -fpic -std=c++2a -c -O2 -I src/include `pkg-config Qt5Widgets --cflags` -DQT_NO_VERSION_TAGGING -msse -msse2 -msse3 -mfpmath=sse `pylon-config --cflags` `pkg-config Qt5Gui --cflags` `pkg-config Qt5Core --cflags`
+g++ bin-int/main.o bin-int/pylon-video.o bin-int/gui.o `pkg-config Qt5Widgets --libs` `pylon-config --libs --libs-rpath` -lpthread `pkg-config Qt5Gui --libs` `pkg-config Qt5Core --libs` -o bin/camapp
 echo Build System Exiting
 make: Leaving directory '/home/okole/Projects/camera-example-application'
  
