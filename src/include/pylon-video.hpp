@@ -8,6 +8,10 @@
 // Pylon includes
 #include <pylon/PylonIncludes.h>
 
+// QT Includes
+#include <QImage>
+
+// STD Includes
 #include <thread>
 #include <mutex>
 
@@ -38,7 +42,7 @@ class Recorder {
         ~Recorder();
 
         bool StartRecording();
-        uint8_t* GetFrame();
+        void CopyFrameToQT(QImage *img);
 
     private:
         void InitializeCamera(const char* const cameraSerial);

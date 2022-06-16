@@ -171,12 +171,16 @@ bool Recorder::StartRecording() {
     return true;
 }
 
-uint8_t* Recorder::GetFrame() {
-    static uint8_t imageBuffer[RESX * RESY * BYTES_PER_PIXEL];
+void Recorder::CopyFrameToQT(QImage *img) {
+    ONLY_DEBUG(M_PRINT("Grabbing Frame"));
+    int arrpos = 0;
 
     _mtx.lock();
-    memcpy(imageBuffer, _imageBuffer, RESX * RESY * BYTES_PER_PIXEL); // Copy frame
+    for(int y = 0; y < RESY; y++) { // Copy frame into buffer (This is very slow but works for now)
+        for(int x = 0; x < RESX; x++) {
+            img->setPixel(x, y, qRgb(0xFF & (int)_imageBuffer[arrpos], 0xFF & (int)_imageBuffer[arrpos+1], 0xFF & (int)_imageBuffer[arrpos+2]));
+            arrpos += 3;
+        }
+    }
     _mtx.unlock();
-
-    return imageBuffer;
 }

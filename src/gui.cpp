@@ -28,19 +28,8 @@ void GUI::run()
     // Create timer for grabbing frames
     auto timer = new QTimer();
     connect(timer, &QTimer::timeout, [this]{ // lambda function to be called every timeout
-        ONLY_DEBUG(M_PRINT("Grabbing Frame"));
-        int arrpos = 0;
-
-        uint8_t* buf = recorder->GetFrame(); // Grab most current frame from recorder
-        for(int y = 0; y < RESY; y++) { // Copy frame into buffer (This is very slow but works for now)
-            for(int x = 0; x < RESX; x++) {
-                img->setPixel(x, y, qRgb(0xFF & (int)buf[arrpos], 0xFF & (int)buf[arrpos+1], 0xFF & (int)buf[arrpos+2]));
-                arrpos += 3;
-            }
-        }
-
+        recorder->CopyFrameToQT(img);
         l->setPixmap(QPixmap::fromImage(*img));
-        //l->show();
     });
     timer->start();
 }

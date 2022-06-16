@@ -6,11 +6,10 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun 16 12:17:58 2022
+# Make data base, printed on Thu Jun 16 15:30:28 2022
 
 # Variables
 
- 
 # 'override' directive
 GNUMAKEFLAGS := 
 # automatic
@@ -70,7 +69,7 @@ BUILDDIR = bin
 # environment
 MANAGERPID = 5200
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-774a3136-6f55-4836-8a83-9054213a7f8d.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-883c4629-3b50-49e2-a0b8-f1233a528d5c.sock
 # environment
 VSCODE_CWD = /home/okole
 # default
@@ -211,7 +210,6 @@ MAKEFILES :=
 PAGER = less
 # environment
 LC_ALL = C
- 
 # environment
 GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # automatic
@@ -286,6 +284,7 @@ all: force bin/camapp
 
 # makefile (from 'makefile', line 14)
 debug: BUILDFLAGS += -D_DEBUG
+ 
 debug: all
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -300,7 +299,6 @@ makefile:
 #  File has been updated.
 #  Successfully updated.
 
- 
 force:
 #  Implicit rule search has not been done.
 #  Implicit/static pattern stem: ''
@@ -384,11 +382,10 @@ bin-int/pylon-video.o: src/pylon-video.cpp
 
 # strcache buffers: 1 (0) / strings = 26 / storage = 249 B / avg = 9 B
 # current buf: size = 8162 B / used = 249 B / count = 26 / avg = 9 B
- 
 
 # strcache performance: lookups = 48 / hit rate = 45%
 # hash-table stats:
 # Load=26/8192=0%, Rehash=0, Collisions=1/48=2%
-# Finished Make data base on Thu Jun 16 12:17:58 2022
+# Finished Make data base on Thu Jun 16 15:30:28 2022
 
  
