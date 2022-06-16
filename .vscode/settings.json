@@ -59,6 +59,7 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "*.moc": "cpp"
+        "*.moc": "cpp",
+        "qlabel": "cpp"
     }
 }

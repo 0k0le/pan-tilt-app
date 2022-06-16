@@ -10,6 +10,7 @@
 using namespace Pylon;
 using namespace GenApi;
 
+// Private statics
 uint8_t Recorder::_imageBuffer[RESX * RESY * BYTES_PER_PIXEL];
 std::mutex Recorder::_mtx;
 std::mutex Recorder::_closeThreadMtx;
@@ -30,20 +31,21 @@ Recorder::~Recorder() {
     if(_recordThread != nullptr) {
         M_PRINT("Waiting for recorder thread");
         
-        _closeThreadMtx.lock();
+        _closeThreadMtx.lock(); // Send close message to recorder thread
         _closeThread = true;
         _closeThreadMtx.unlock();
 
-        _recordThread->join();
+        _recordThread->join(); // Wait for thread to close
         delete _recordThread;
     }
 
     if(_camera != nullptr) {
         M_PRINT("Closing camera handle");
-        _camera->Close();
+        _camera->Close(); // Close pylon camera object
         delete _camera;
     }
 
+    // Cleanup pylon API
     PylonTerminate();
 }
 
@@ -82,10 +84,10 @@ void Recorder::InitializeCamera(const char* const cameraSerial) {
             throw GENERIC_EXCEPTION("Failed to find camera with serial: %s", cameraSerial);
 
         M_PRINT("Connecting to: %s", cameraSerial);
-        _camera = new CMyInstantCamera(TlFactory.CreateDevice(*it));
+        _camera = new CMyInstantCamera(TlFactory.CreateDevice(*it)); // Create camera device
         M_PRINT("Camera connection successful");
 
-        _camera->Open();
+        _camera->Open(); // Open camera
 
         // Configure camera
         M_PRINT("Configuring camera settings");

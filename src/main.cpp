@@ -22,23 +22,15 @@
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
 
-    Recorder *recorder = new Recorder("40125042");
+    // QT object that controls the GUI
+    GUI *gui = new GUI;
+    gui->run();
 
-    recorder->StartRecording();
-
-    QImage img(RESX, RESY, QImage::Format_RGB888);
-    img.fill(QColor(Qt::red).rgb());
-
-    QLabel l;
-    l.setPixmap(QPixmap::fromImage(img));
-    l.show();
-
-    GUI gui(recorder, img, &l);
-    gui.run();
-
+    // Execute
     int ret = app.exec();
 
-    delete recorder;
+    // Cleanup
+    delete gui;
 
     return ret;
 }
