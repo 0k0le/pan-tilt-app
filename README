@@ -1,0 +1,9 @@
+README
+
+What is this and what is this not?
+
+This application talks to two systems, the embedded system for motor control, and the camera for video.
+
+This application is NOT THE FIRMWARE IN ANY CAPACITY.
+
+This project serves as an example for how we create applications with our own API.
