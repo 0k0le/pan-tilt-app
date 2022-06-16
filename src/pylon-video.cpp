@@ -171,6 +171,7 @@ bool Recorder::StartRecording() {
     return true;
 }
 
+// This method of copying frames eliminates a useless copy function
 void Recorder::CopyFrameToQT(QImage *img) {
     ONLY_DEBUG(M_PRINT("Grabbing Frame"));
     int arrpos = 0;
