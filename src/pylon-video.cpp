@@ -7,8 +7,11 @@
 #include "macros.hpp"
 #include "pylon-video.hpp"
 
+#include <opencv2/opencv.hpp>
+
 using namespace Pylon;
 using namespace GenApi;
+using namespace cv;
 
 // Private statics
 uint8_t Recorder::_imageBuffer[RESX * RESY * BYTES_PER_PIXEL];
@@ -100,8 +103,10 @@ void Recorder::InitializeCamera(const char* const cameraSerial) {
         CEnumParameter pixelFormat(_camera->GetNodeMap(), "PixelFormat");
 
         // Set camera properties
-        width.TrySetValue(RESX, IntegerValueCorrection_Nearest);
-        height.TrySetValue(RESY, IntegerValueCorrection_Nearest);
+        //width.TrySetValue(RESX, IntegerValueCorrection_Nearest);
+        //height.TrySetValue(RESY, IntegerValueCorrection_Nearest);
+        width.TrySetToMaximum(); // Set to maximum, we will downscale using opencv
+        height.TrySetToMaximum();
         offsetX.TrySetToMinimum();
         offsetY.TrySetToMinimum();
         pixelFormat.SetIntValue(PixelType_RGB8packed);
@@ -118,6 +123,10 @@ void Recorder::InitializeCamera(const char* const cameraSerial) {
 void Recorder::RecordThread(void *data) {
     RThreadData *baslerInfo = (RThreadData *)data;
 
+    CIntegerParameter width(baslerInfo->camera->GetNodeMap(), "Width");
+    CIntegerParameter height(baslerInfo->camera->GetNodeMap(), "Height");
+
+    M_PRINT("Camera X: %ld -- Camera Y: %ld", width.GetValue(), height.GetValue());
     CLock& lock = baslerInfo->camera->RetLock();
 
     M_PRINT("Initiating grabber");
@@ -146,8 +155,16 @@ void Recorder::RecordThread(void *data) {
             ONLY_DEBUG(M_PRINT("SizeY: %d", ptrGrabResult->GetHeight()));
             ONLY_DEBUG(M_PRINT("Buffer Size: %ld", ptrGrabResult->GetBufferSize()));
 
+            // Downscale image
+            uint8_t* newImageBuffer = (uint8_t*)ptrGrabResult->GetBuffer();
+            Mat img(Size(static_cast<int>(width.GetValue()), static_cast<int>(height.GetValue())), CV_8UC3, newImageBuffer);
+            resize(img, img, Size(RESX, RESY));
+            ONLY_DEBUG(Size imgSize = img.size());
+            ONLY_DEBUG(M_PRINT("New Dimensions X: %d", imgSize.width));
+            ONLY_DEBUG(M_PRINT("New Dimensions Y: %d", imgSize.height));
+
             _mtx.lock();
-            memcpy(_imageBuffer, ptrGrabResult->GetBuffer(), RESX * RESY * BYTES_PER_PIXEL); // Save copy of frame
+            memcpy(_imageBuffer, img.data, RESX * RESY * BYTES_PER_PIXEL); // Save copy of frame
             _mtx.unlock();
         } else {
             M_ERR("Failed to grab image");

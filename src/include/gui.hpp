@@ -28,4 +28,6 @@ private:
     QLabel *l;
     QSlider *hozSlider;
     QLabel *hozSliderLabel;
+    QSlider *vertSlider;
+    QLabel *vertSliderLabel;
 };

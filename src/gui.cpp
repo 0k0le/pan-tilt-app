@@ -28,6 +28,20 @@ GUI::GUI(QObject *parent) : QObject(parent) {
     hozSlider->setSingleStep(1);
     hozSlider->show();
 
+    // Setup labels
+    vertSliderLabel = new QLabel(l);
+    vertSliderLabel->setGeometry(RESX + 20, 100, 100, 20);
+    vertSliderLabel->setText("Vertical Axis");
+    vertSliderLabel->show();
+
+    // Setup sliders
+    vertSlider = new QSlider(Qt::Horizontal, l);
+    vertSlider->setGeometry(QRect(QPoint(RESX + 20, 130), QSize(200, 50)));
+    vertSlider->setFocusPolicy(Qt::StrongFocus);
+    vertSlider->setTickPosition(QSlider::TicksBothSides);
+    vertSlider->setSingleStep(1);
+    vertSlider->show();
+
     connect(hozSlider, &QSlider::sliderMoved, this, GUI::HandleHozSlider);
 
     // Start swapping image buffers and grabbing frames
@@ -35,7 +49,6 @@ GUI::GUI(QObject *parent) : QObject(parent) {
 }
 
 GUI::~GUI() {
-    delete hozSlider;
     delete recorder;
     delete img;
     delete l;
