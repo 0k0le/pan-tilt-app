@@ -11,16 +11,38 @@ GUI::GUI(QObject *parent) : QObject(parent) {
     img->fill(QColor(Qt::red).rgb()); // Fill image with test color for debug
 
     l->setPixmap(QPixmap::fromImage(*img)); // Apply image to label
+    l->setFixedSize(RESX + 240, RESY);
     l->show();
+
+    // Setup labels
+    hozSliderLabel = new QLabel(l);
+    hozSliderLabel->setGeometry(RESX + 20, 10, 100, 20);
+    hozSliderLabel->setText("Horizontal Axis");
+    hozSliderLabel->show();
+
+    // Setup sliders
+    hozSlider = new QSlider(Qt::Horizontal, l);
+    hozSlider->setGeometry(QRect(QPoint(RESX + 20, 40), QSize(200, 50)));
+    hozSlider->setFocusPolicy(Qt::StrongFocus);
+    hozSlider->setTickPosition(QSlider::TicksBothSides);
+    hozSlider->setSingleStep(1);
+    hozSlider->show();
+
+    connect(hozSlider, &QSlider::sliderMoved, this, GUI::HandleHozSlider);
 
     // Start swapping image buffers and grabbing frames
     recorder->StartRecording();
 }
 
 GUI::~GUI() {
+    delete hozSlider;
     delete recorder;
     delete img;
     delete l;
+}
+
+void GUI::HandleHozSlider() {
+    M_PRINT("Moving debug slider");
 }
 
 void GUI::run()

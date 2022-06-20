@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QImage>
 #include <QLabel>
+#include <QSlider>
 
 #include "macros.hpp"
 #include "pylon-video.hpp"
@@ -18,8 +19,13 @@ public:
 
     void run(); // call this when initialization is done
 
+public slots:
+    static void HandleHozSlider();
+
 private:
     Recorder *recorder;
     QImage *img;
     QLabel *l;
+    QSlider *hozSlider;
+    QLabel *hozSliderLabel;
 };
