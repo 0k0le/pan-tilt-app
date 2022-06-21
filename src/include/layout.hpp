@@ -4,6 +4,7 @@
  */
 
 #include "macros.hpp"
+#include "network.hpp"
 
 #include <QObject>
 #include <QSlider>
@@ -13,9 +14,9 @@ class Layout : public QObject {
     Q_OBJECT
     
     public:
-        explicit Layout(QLabel* parent);
+        explicit Layout(QLabel* parent, const char* const bbgIp);
         virtual ~Layout();
-    
+
     private:
         // Rotation objects
         QSlider* xRotationSlider;
@@ -37,4 +38,6 @@ class Layout : public QObject {
         QLabel* exposureLabel;
         QLabel* whitebalanceLabel;
         QLabel* gainLabel;
+
+        Client* client;
 };

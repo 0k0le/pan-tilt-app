@@ -27,12 +27,10 @@ int main(int argc, char** argv) {
     const char* const cameraSerial = argv[1];
     const char* const bbgIp = argv[2];
 
-    Client* client = new Client(bbgIp);
-
     QApplication app(argc, argv);
 
     // QT object that controls the GUI
-    GUI *gui = new GUI(cameraSerial);
+    GUI *gui = new GUI(cameraSerial, bbgIp);
     gui->run();
 
     // Execute
@@ -40,7 +38,6 @@ int main(int argc, char** argv) {
 
     // Cleanup
     delete gui;
-    delete client;
 
     return ret;
 }

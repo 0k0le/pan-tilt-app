@@ -6,8 +6,9 @@
 #include "pylon-video.hpp"
 #include "moc/layout.moc"
 
-Layout::Layout(QLabel* parent) : QObject(parent) {
-    
+Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
+    client = new Client(bbgIp);
+
     // Setup labels
     xRotationLabel = new QLabel(parent);
     xRotationLabel->setGeometry(RESX + 20, 10, 100, 20);
@@ -17,6 +18,8 @@ Layout::Layout(QLabel* parent) : QObject(parent) {
     // Setup sliders
     xRotationSlider = new QSlider(Qt::Horizontal, parent);
     xRotationSlider->setGeometry(QRect(QPoint(RESX + 20, 40), QSize(250, 50)));
+    xRotationSlider->setMaximum(100);
+    xRotationSlider->setMinimum(0);
     xRotationSlider->setFocusPolicy(Qt::StrongFocus);
     xRotationSlider->setTickPosition(QSlider::TicksBothSides);
     xRotationSlider->setSingleStep(1);
@@ -120,7 +123,9 @@ Layout::Layout(QLabel* parent) : QObject(parent) {
     gainLabel->setText("Gain");
     gainLabel->show();
 
-    //connect(hozSlider, &QSlider::sliderMoved, this, Layout::HandleHozSlider);
+    connect(xRotationSlider, &QSlider::valueChanged, this, [this]{
+        M_PRINT("Requesting X Rotation Move %d%", this->xRotationSlider->value());
+    });
 }
 
 Layout::~Layout() {
@@ -143,4 +148,6 @@ Layout::~Layout() {
     delete exposureLabel;
     delete whitebalanceLabel;
     delete gainLabel;
+
+    delete client;
 }

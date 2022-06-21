@@ -15,7 +15,7 @@ class GUI : public QObject
     Q_OBJECT
 
 public:
-    explicit GUI(const char* const cameraSerial, QObject *parent = 0);
+    explicit GUI(const char* const cameraSerial, const char* const bbgIp, QObject *parent = 0);
     virtual ~GUI();
 
     void run(); // call this when initialization is done

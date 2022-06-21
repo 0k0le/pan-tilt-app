@@ -3,7 +3,7 @@
 #include "pylon-video.hpp"
 #include "moc/gui.moc"
 
-GUI::GUI(const char* const cameraSerial, QObject *parent) : QObject(parent) {
+GUI::GUI(const char* const cameraSerial, const char* const bbgIp, QObject *parent) : QObject(parent) {
     recorder = new Recorder(cameraSerial); // Initialize recorder and establish connection with camera
     img = new QImage(RESX, RESY, QImage::Format_RGB888); // Create image buffer to load recorder frames
     l = new QLabel; // Create label to paste image on

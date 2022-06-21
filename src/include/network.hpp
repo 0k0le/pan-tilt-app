@@ -31,6 +31,8 @@ class Client {
             const int packetLen = PKTSIZE);
         ~Client();
 
+        void RequestChange(const char* const command, int value);
+
     private:
         int _sock;
         int _port;
