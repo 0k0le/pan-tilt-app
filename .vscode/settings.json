@@ -60,6 +60,7 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "*.moc": "cpp",
-        "qlabel": "cpp"
+        "qlabel": "cpp",
+        "*.ipp": "cpp"
     }
 }

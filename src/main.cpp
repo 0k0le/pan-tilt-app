@@ -12,6 +12,7 @@
 #include <pylon-video.hpp>
 
 #include "gui.hpp"
+#include "network.hpp"
 
 // Qt Includes
 #include <QApplication>
@@ -20,10 +21,13 @@
 #include <QThread>
 
 int main(int argc, char** argv) {
-    if(argc < 2)
-        M_FATAL("%s <CAMERA_SERIAL>", argv[0]);
+    if(argc < 3)
+        M_FATAL("%s <CAMERA_SERIAL> <BBG_IP>", argv[0]);
 
     const char* const cameraSerial = argv[1];
+    const char* const bbgIp = argv[2];
+
+    Client* client = new Client(bbgIp);
 
     QApplication app(argc, argv);
 
@@ -36,6 +40,7 @@ int main(int argc, char** argv) {
 
     // Cleanup
     delete gui;
+    delete client;
 
     return ret;
 }

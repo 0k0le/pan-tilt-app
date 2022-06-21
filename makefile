@@ -16,8 +16,8 @@ debug: BUILDFLAGS+= -D_DEBUG
 all: force $(BUILDDIR)/$(APPNAME)
 	@echo Build System Exiting
 
-$(BUILDDIR)/$(APPNAME): $(INTBUILDDIR)/main.o $(INTBUILDDIR)/pylon-video.o $(INTBUILDDIR)/gui.o $(INTBUILDDIR)/layout.o
-	$(CC) $(INTBUILDDIR)/main.o $(INTBUILDDIR)/pylon-video.o $(INTBUILDDIR)/gui.o $(INTBUILDDIR)/layout.o $(LINKERFLAGS) -o $(BUILDDIR)/$(APPNAME)
+$(BUILDDIR)/$(APPNAME): $(INTBUILDDIR)/main.o $(INTBUILDDIR)/pylon-video.o $(INTBUILDDIR)/gui.o $(INTBUILDDIR)/layout.o $(INTBUILDDIR)/network.o
+	$(CC) $(INTBUILDDIR)/main.o $(INTBUILDDIR)/pylon-video.o $(INTBUILDDIR)/gui.o $(INTBUILDDIR)/layout.o $(INTBUILDDIR)/network.o $(LINKERFLAGS) -o $(BUILDDIR)/$(APPNAME)
 
 $(INTBUILDDIR)/gui.o: $(SRCDIR)/gui.cpp
 	moc $(SRCDIR)/include/gui.hpp > $(SRCDIR)/moc/gui.moc
@@ -32,6 +32,9 @@ $(INTBUILDDIR)/main.o: $(SRCDIR)/main.cpp
 
 $(INTBUILDDIR)/pylon-video.o: $(SRCDIR)/pylon-video.cpp
 	$(CC) $(SRCDIR)/pylon-video.cpp -o $(INTBUILDDIR)/pylon-video.o $(BUILDFLAGS)
+
+$(INTBUILDDIR)/network.o: $(SRCDIR)/network.cpp
+	$(CC) $(SRCDIR)/network.cpp -o $(INTBUILDDIR)/network.o $(BUILDFLAGS)
 
 debug: all
 
