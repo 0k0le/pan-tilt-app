@@ -8,6 +8,7 @@
 
 #include "macros.hpp"
 #include "pylon-video.hpp"
+#include "layout.hpp"
 
 class GUI : public QObject
 {
@@ -26,8 +27,5 @@ private:
     Recorder *recorder;
     QImage *img;
     QLabel *l;
-    QSlider *hozSlider;
-    QLabel *hozSliderLabel;
-    QSlider *vertSlider;
-    QLabel *vertSliderLabel;
+    Layout *layout;
 };

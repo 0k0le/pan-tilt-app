@@ -16,12 +16,16 @@ debug: BUILDFLAGS+= -D_DEBUG
 all: force $(BUILDDIR)/$(APPNAME)
 	@echo Build System Exiting
 
-$(BUILDDIR)/$(APPNAME): $(INTBUILDDIR)/main.o $(INTBUILDDIR)/pylon-video.o $(INTBUILDDIR)/gui.o
-	$(CC) $(INTBUILDDIR)/main.o $(INTBUILDDIR)/pylon-video.o $(INTBUILDDIR)/gui.o $(LINKERFLAGS) -o $(BUILDDIR)/$(APPNAME)
+$(BUILDDIR)/$(APPNAME): $(INTBUILDDIR)/main.o $(INTBUILDDIR)/pylon-video.o $(INTBUILDDIR)/gui.o $(INTBUILDDIR)/layout.o
+	$(CC) $(INTBUILDDIR)/main.o $(INTBUILDDIR)/pylon-video.o $(INTBUILDDIR)/gui.o $(INTBUILDDIR)/layout.o $(LINKERFLAGS) -o $(BUILDDIR)/$(APPNAME)
 
 $(INTBUILDDIR)/gui.o: $(SRCDIR)/gui.cpp
 	moc $(SRCDIR)/include/gui.hpp > $(SRCDIR)/moc/gui.moc
 	$(CC) $(SRCDIR)/gui.cpp -o $(INTBUILDDIR)/gui.o -I ./ $(BUILDFLAGS)
+
+$(INTBUILDDIR)/layout.o: $(SRCDIR)/layout.cpp
+	moc $(SRCDIR)/include/layout.hpp > $(SRCDIR)/moc/layout.moc
+	$(CC) $(SRCDIR)/layout.cpp -o $(INTBUILDDIR)/layout.o -I ./ $(BUILDFLAGS)
 
 $(INTBUILDDIR)/main.o: $(SRCDIR)/main.cpp
 	$(CC) $(SRCDIR)/main.cpp -o $(INTBUILDDIR)/main.o $(BUILDFLAGS)

@@ -14,35 +14,7 @@ GUI::GUI(const char* const cameraSerial, QObject *parent) : QObject(parent) {
     l->setFixedSize(RESX + 240, RESY);
     l->show();
 
-    // Setup labels
-    hozSliderLabel = new QLabel(l);
-    hozSliderLabel->setGeometry(RESX + 20, 10, 100, 20);
-    hozSliderLabel->setText("Horizontal Axis");
-    hozSliderLabel->show();
-
-    // Setup sliders
-    hozSlider = new QSlider(Qt::Horizontal, l);
-    hozSlider->setGeometry(QRect(QPoint(RESX + 20, 40), QSize(200, 50)));
-    hozSlider->setFocusPolicy(Qt::StrongFocus);
-    hozSlider->setTickPosition(QSlider::TicksBothSides);
-    hozSlider->setSingleStep(1);
-    hozSlider->show();
-
-    // Setup labels
-    vertSliderLabel = new QLabel(l);
-    vertSliderLabel->setGeometry(RESX + 20, 100, 100, 20);
-    vertSliderLabel->setText("Vertical Axis");
-    vertSliderLabel->show();
-
-    // Setup sliders
-    vertSlider = new QSlider(Qt::Horizontal, l);
-    vertSlider->setGeometry(QRect(QPoint(RESX + 20, 130), QSize(200, 50)));
-    vertSlider->setFocusPolicy(Qt::StrongFocus);
-    vertSlider->setTickPosition(QSlider::TicksBothSides);
-    vertSlider->setSingleStep(1);
-    vertSlider->show();
-
-    connect(hozSlider, &QSlider::sliderMoved, this, GUI::HandleHozSlider);
+    layout = new Layout(l);
 
     // Start swapping image buffers and grabbing frames
     recorder->StartRecording();
