@@ -11,7 +11,7 @@ GUI::GUI(const char* const cameraSerial, QObject *parent) : QObject(parent) {
     img->fill(QColor(Qt::red).rgb()); // Fill image with test color for debug
 
     l->setPixmap(QPixmap::fromImage(*img)); // Apply image to label
-    l->setFixedSize(RESX + 240, RESY);
+    l->setFixedSize(RESX + 290, RESY);
     l->show();
 
     layout = new Layout(l);
@@ -22,8 +22,8 @@ GUI::GUI(const char* const cameraSerial, QObject *parent) : QObject(parent) {
 
 GUI::~GUI() {
     delete recorder;
-    delete img;
     delete l;
+    delete img;
 }
 
 void GUI::HandleHozSlider() {

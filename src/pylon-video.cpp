@@ -49,6 +49,7 @@ Recorder::~Recorder() {
     }
 
     // Cleanup pylon API
+    M_PRINT("Cleanup pylon API");
     PylonTerminate();
 }
 

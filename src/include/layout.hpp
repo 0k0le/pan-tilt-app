@@ -17,8 +17,24 @@ class Layout : public QObject {
         virtual ~Layout();
     
     private:
-        QSlider *hozSlider;
-        QLabel *hozSliderLabel;
-        QSlider *vertSlider;
-        QLabel *vertSliderLabel;
+        // Rotation objects
+        QSlider* xRotationSlider;
+        QLabel* xRotationLabel;
+        QSlider* yRotationSlider;
+        QLabel* yRotationLabel;
+
+        // Camera effects objects
+        QSlider* focusSlider;
+        QSlider* zoomSlider;
+        QSlider* apertureSlider;
+        QSlider* exposureSlider;
+        QSlider* whitebalanceSlider;
+        QSlider* gainSlider;
+        
+        QLabel* focusLabel;
+        QLabel* zoomLabel;
+        QLabel* apertureLabel;
+        QLabel* exposureLabel;
+        QLabel* whitebalanceLabel;
+        QLabel* gainLabel;
 };
