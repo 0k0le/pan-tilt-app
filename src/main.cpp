@@ -20,10 +20,15 @@
 #include <QThread>
 
 int main(int argc, char** argv) {
+    if(argc < 2)
+        M_FATAL("%s <CAMERA_SERIAL>", argv[0]);
+
+    const char* const cameraSerial = argv[1];
+
     QApplication app(argc, argv);
 
     // QT object that controls the GUI
-    GUI *gui = new GUI;
+    GUI *gui = new GUI(cameraSerial);
     gui->run();
 
     // Execute

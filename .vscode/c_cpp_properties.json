@@ -8,13 +8,14 @@
                 "/usr/include/x86_64-linux-gnu/qt5/**",
                 "/usr/include/x86_64-linux-gnu/qt5/QtCore/**",
                 "/usr/include/x86_64-linux-gnu/qt5/QtWidgets/**",
-                "/usr/include/opencv4/**"
+                "/usr/include/opencv4/**",
+                "/opt/pylon/include/**"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/clang",
+            "compilerPath": "/usr/bin/gcc",
             "cStandard": "c17",
             "cppStandard": "c++20",
-            "intelliSenseMode": "linux-gcc-x64",
+            "intelliSenseMode": "linux-gcc-x64"
             // "configurationProvider": "ms-vscode.makefile-tools" // This causes problems with intellisense
         }
     ],
