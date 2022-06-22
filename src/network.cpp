@@ -5,9 +5,18 @@
 
 #include "network.hpp"
 
+int recv_full(int sock, int size, char* buf) {
+    int remainder = 0;
+    while(remainder = recv(sock, buf, size, 0) != 0) {
+        size -= size - remainder;
+    }
+}
+
 Client::Client(const char* const server, const int portnum,
     const int packetLen) : _port(portnum), _packetLen(packetLen) {
-    char testmsg[PKTSIZE] = "TEST";
+    //char testmsg[PKTSIZE] = "TEST";
+    char* testmsg = new char[_packetLen];
+    strcpy(testmsg, "test");
 
     struct sockaddr_in servaddr;
 
@@ -30,6 +39,26 @@ Client::Client(const char* const server, const int portnum,
     M_PRINT("Recieved: %s", testmsg);
     if(strcmp(testmsg, "conf") != 0)
         M_FATAL("Did not recieve confirmation from server");
+
+    delete testmsg;
+}
+
+void Client::RequestChange(const char* const command, int value) {
+    char* recvbuf = new char[_packetLen];
+    memset(recvbuf, 0, _packetLen);
+    M_PRINT("Sending command: %s", command);
+
+    send(_sock, command, _packetLen, 0);
+    send(_sock, &value, sizeof(int), 0);
+
+    recv(_sock, recvbuf, _packetLen, 0);
+
+    M_PRINT("Server Response: %s", recvbuf);
+
+    if(memcmp(recvbuf, SUCCESS, 4) != 0)
+        M_FATAL("Failed to get valid response from server");
+
+    delete recvbuf;
 }
 
 Client::~Client() {

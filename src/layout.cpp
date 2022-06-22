@@ -123,8 +123,8 @@ Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
     gainLabel->setText("Gain");
     gainLabel->show();
 
-    connect(xRotationSlider, &QSlider::valueChanged, this, [this]{
-        M_PRINT("Requesting X Rotation Move %d%", this->xRotationSlider->value());
+    connect(focusSlider, &QSlider::valueChanged, this, [this]{
+        this->client->RequestChange(FOCUS_CONTROL, 50);
     });
 }
 

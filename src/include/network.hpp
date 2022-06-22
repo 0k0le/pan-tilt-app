@@ -3,6 +3,8 @@
  * network.hpp
  */
 
+#pragma once
+
 #include "macros.hpp"
 
 #include <cstring>
@@ -21,6 +23,8 @@
 #define IRIS_CONTROL "IRIS"
 #define ZOOM_CONTROL "ZOOM"
 #define FOCUS_CONTROL "FOCU"
+
+#define SUCCESS "conf"
 
 #define PORTNO  65432
 #define PKTSIZE 5

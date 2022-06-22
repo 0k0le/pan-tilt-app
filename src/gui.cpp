@@ -14,7 +14,7 @@ GUI::GUI(const char* const cameraSerial, const char* const bbgIp, QObject *paren
     l->setFixedSize(RESX + 290, RESY);
     l->show();
 
-    layout = new Layout(l);
+    layout = new Layout(l, bbgIp);
 
     // Start swapping image buffers and grabbing frames
     recorder->StartRecording();

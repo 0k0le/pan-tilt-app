@@ -3,6 +3,8 @@
  * layout.hpp
  */
 
+#pragma once
+
 #include "macros.hpp"
 #include "network.hpp"
 
