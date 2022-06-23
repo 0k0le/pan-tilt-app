@@ -103,6 +103,9 @@ void Recorder::InitializeCamera(const char* const cameraSerial) {
         CIntegerParameter offsetY(_camera->GetNodeMap(), "OffsetY");
         CEnumParameter pixelFormat(_camera->GetNodeMap(), "PixelFormat");
 
+        _camera->ExposureMode.SetValue(Basler_UniversalCameraParams::ExposureModeEnums::ExposureMode_Timed);
+        _camera->ExposureAuto.SetValue(Basler_UniversalCameraParams::ExposureAuto_Off);
+
         // Set camera properties
         //width.TrySetValue(RESX, IntegerValueCorrection_Nearest);
         //height.TrySetValue(RESY, IntegerValueCorrection_Nearest);
@@ -128,7 +131,11 @@ void Recorder::SetExposure(int percentage) {
 
     M_PRINT("New Exposure: %f", calculatedExposure);
 
-    CFloatParameter(_camera->GetNodeMap(), "ExposureTime").SetValue(calculatedExposure);
+    //_camera->RetLock().Lock();
+    M_PRINT("Attempting to set exposure");
+    //_camera->BslExposureTimeMode.SetValue(Basler_UniversalCameraParams::ExposureTimeModeEnums::ExposureTimeMode_Standard);
+    _camera->ExposureTime.TrySetValue(3500.0);
+    //_camera->RetLock().Unlock();
 }
 
 void Recorder::RecordThread(void *data) {

@@ -7,6 +7,7 @@
 
 // Pylon includes
 #include <pylon/PylonIncludes.h>
+#include <pylon/BaslerUniversalInstantCamera.h>
 
 // QT Includes
 #include <QImage>
@@ -25,9 +26,9 @@
 using namespace Pylon;
 using namespace GenApi;
 
-class CMyInstantCamera : public CInstantCamera {
+class CMyInstantCamera : public CBaslerUniversalInstantCamera {
     public:
-        CMyInstantCamera(IPylonDevice *dev) : CInstantCamera(dev) {}
+        CMyInstantCamera(IPylonDevice *dev) : CBaslerUniversalInstantCamera(dev) {}
 
         CLock& RetLock() {
             static CLock& lock = CInstantCamera::GetLock();
