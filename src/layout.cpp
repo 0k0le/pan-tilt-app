@@ -124,7 +124,15 @@ Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
     gainLabel->show();
 
     connect(focusSlider, &QSlider::valueChanged, this, [this]{
-        this->client->RequestChange(FOCUS_CONTROL, 50);
+        this->client->RequestChange(FOCUS_CONTROL, this->focusSlider->value());
+    });
+
+    connect(apertureSlider, &QSlider::valueChanged, this, [this]{
+        this->client->RequestChange(IRIS_CONTROL, this->apertureSlider->value());
+    });
+
+    connect(zoomSlider, &QSlider::valueChanged, this, [this]{
+        this->client->RequestChange(ZOOM_CONTROL, this->zoomSlider->value());
     });
 }
 

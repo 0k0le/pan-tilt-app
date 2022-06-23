@@ -5,10 +5,14 @@
 
 #include "network.hpp"
 
-int recv_full(int sock, int size, char* buf) {
-    int remainder = 0;
-    while(remainder = recv(sock, buf, size, 0) != 0) {
-        size -= size - remainder;
+void recv_full(int sock, int size, char* buf) {
+    int recv_length = recv(sock, buf, size, 0);
+    while(recv_length != size-1) {
+        size -= recv_length;
+
+        M_PRINT("PULLING MORE DATA: %d", recv_length);
+        if((recv_length = recv(sock, buf, size, 0)) == -1)
+            M_FATAL("Failed to recv data");
     }
 }
 
@@ -34,7 +38,8 @@ Client::Client(const char* const server, const int portnum,
         M_FATAL("Failed to connect to BBG @ IP %s", server);
 
     send(_sock, testmsg, _packetLen, 0);
-    recv(_sock, testmsg, _packetLen, 0);
+    //recv(_sock, testmsg, _packetLen, 0);
+    recv_full(_sock, _packetLen, testmsg);
 
     M_PRINT("Recieved: %s", testmsg);
     if(strcmp(testmsg, "conf") != 0)
@@ -49,9 +54,11 @@ void Client::RequestChange(const char* const command, int value) {
     M_PRINT("Sending command: %s", command);
 
     send(_sock, command, _packetLen, 0);
+
+    M_PRINT("Sending change value %d", value);
     send(_sock, &value, sizeof(int), 0);
 
-    recv(_sock, recvbuf, _packetLen, 0);
+    recv_full(_sock, _packetLen, recvbuf);
 
     M_PRINT("Server Response: %s", recvbuf);
 
