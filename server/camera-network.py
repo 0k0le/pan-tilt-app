@@ -67,10 +67,10 @@ def focus_thread():
         current_voltage = ADC.read(FOCUS_POT_PIN) * 1.8
         #print(f"{current_voltage}")
 
-        if current_voltage > target_voltage + 0.05:
+        if current_voltage > target_voltage + 0.01:
             GPIO.output(FOCUS_DIR_PIN, GPIO.HIGH)
             PWM.start(FOCUS_PWM_PIN, 50)
-        elif current_voltage < target_voltage - 0.05:
+        elif current_voltage < target_voltage - 0.01:
             GPIO.output(FOCUS_DIR_PIN, GPIO.LOW)
             PWM.start(FOCUS_PWM_PIN, 50)
         else:
@@ -103,10 +103,10 @@ def zoom_thread():
 
         current_voltage = ADC.read(ZOOM_POT_PIN)*1.8
 
-        if current_voltage > target_voltage + 0.05:
+        if current_voltage > target_voltage + 0.01:
             GPIO.output(ZOOM_DIR_PIN, GPIO.LOW)
             PWM.start(ZOOM_PWM_PIN, 50)
-        elif current_voltage < target_voltage - 0.05:
+        elif current_voltage < target_voltage - 0.01:
             GPIO.output(ZOOM_DIR_PIN, GPIO.HIGH)
             PWM.start(ZOOM_PWM_PIN, 50)
         else:
@@ -138,10 +138,10 @@ def iris_thread():
 
         current_voltage = ADC.read(IRIS_POT_PIN)*1.8
 
-        if current_voltage > target_voltage + 0.05:
+        if current_voltage > target_voltage + 0.01:
             GPIO.output(IRIS_DIR_PIN, GPIO.HIGH)
             PWM.start(IRIS_PWM_PIN, 50)
-        elif current_voltage < target_voltage - 0.05:
+        elif current_voltage < target_voltage - 0.01:
             GPIO.output(IRIS_DIR_PIN, GPIO.LOW)
             PWM.start(IRIS_PWM_PIN, 50)
         else:
