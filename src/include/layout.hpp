@@ -21,7 +21,7 @@ class Layout : public QObject {
     Q_OBJECT
     
     public:
-        explicit Layout(QLabel* parent, const char* const bbgIp);
+        explicit Layout(Recorder* recorder, QLabel* parent, const char* const bbgIp);
         virtual ~Layout();
 
     private:
@@ -47,6 +47,7 @@ class Layout : public QObject {
         QLabel* gainLabel;
 
         Client* client;
+        Recorder* _recorder;
 
         std::thread *dispatchThread = nullptr;
 

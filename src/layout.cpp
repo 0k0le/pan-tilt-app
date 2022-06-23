@@ -34,8 +34,10 @@ void Layout::DispatchThread(void *data) {
     }
 }
 
-Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
+Layout::Layout(Recorder* recorder, QLabel* parent, const char* const bbgIp) : QObject(parent) {
     client = new Client(bbgIp);
+
+    _recorder = recorder;
 
     // Setup labels
     xRotationLabel = new QLabel(parent);
@@ -70,6 +72,8 @@ Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
     // Vertical Sliders
     focusSlider = new QSlider(Qt::Vertical, parent);
     focusSlider->setGeometry(RESX + 27, 230, 50, 200);
+    focusSlider->setMaximum(100);
+    focusSlider->setMinimum(0);
     focusSlider->setFocusPolicy(Qt::StrongFocus);
     focusSlider->setTickPosition(QSlider::TicksBothSides);
     focusSlider->setSingleStep(1);
@@ -78,6 +82,8 @@ Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
     // Vertical Sliders
     zoomSlider = new QSlider(Qt::Vertical, parent);
     zoomSlider->setGeometry(RESX + 123, 230, 50, 200);
+    zoomSlider->setMaximum(100);
+    zoomSlider->setMinimum(0);
     zoomSlider->setFocusPolicy(Qt::StrongFocus);
     zoomSlider->setTickPosition(QSlider::TicksBothSides);
     zoomSlider->setSingleStep(1);
@@ -86,6 +92,8 @@ Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
     // Vertical Sliders
     apertureSlider = new QSlider(Qt::Vertical, parent);
     apertureSlider->setGeometry(RESX + 218, 230, 50, 200);
+    apertureSlider->setMaximum(100);
+    apertureSlider->setMinimum(0);
     apertureSlider->setFocusPolicy(Qt::StrongFocus);
     apertureSlider->setTickPosition(QSlider::TicksBothSides);
     apertureSlider->setSingleStep(1);
@@ -94,6 +102,8 @@ Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
     // Vertical Sliders
     exposureSlider = new QSlider(Qt::Vertical, parent);
     exposureSlider->setGeometry(RESX + 27, 480, 50, 200);
+    exposureSlider->setMaximum(100);
+    exposureSlider->setMinimum(0);
     exposureSlider->setFocusPolicy(Qt::StrongFocus);
     exposureSlider->setTickPosition(QSlider::TicksBothSides);
     exposureSlider->setSingleStep(1);
@@ -102,6 +112,8 @@ Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
     // Vertical Sliders
     whitebalanceSlider = new QSlider(Qt::Vertical, parent);
     whitebalanceSlider->setGeometry(RESX + 123, 480, 50, 200);
+    whitebalanceSlider->setMaximum(100);
+    whitebalanceSlider->setMinimum(0);
     whitebalanceSlider->setFocusPolicy(Qt::StrongFocus);
     whitebalanceSlider->setTickPosition(QSlider::TicksBothSides);
     whitebalanceSlider->setSingleStep(1);
@@ -110,6 +122,8 @@ Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
     // Vertical Sliders
     gainSlider = new QSlider(Qt::Vertical, parent);
     gainSlider->setGeometry(RESX + 218, 480, 50, 200);
+    gainSlider->setMaximum(100);
+    gainSlider->setMinimum(0);
     gainSlider->setFocusPolicy(Qt::StrongFocus);
     gainSlider->setTickPosition(QSlider::TicksBothSides);
     gainSlider->setSingleStep(1);
@@ -156,7 +170,6 @@ Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
         this->dData.data = this->focusSlider->value();
         strcpy(this->dData.msg, FOCUS_CONTROL);
         dlock.unlock();
-        //this->client->RequestChange(FOCUS_CONTROL, this->focusSlider->value());
     });
 
     connect(apertureSlider, &QSlider::valueChanged, this, [this]{
@@ -164,7 +177,6 @@ Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
         this->dData.data = this->apertureSlider->value();
         strcpy(this->dData.msg, IRIS_CONTROL);
         dlock.unlock();
-        //this->client->RequestChange(IRIS_CONTROL, this->apertureSlider->value());
     });
 
     connect(zoomSlider, &QSlider::valueChanged, this, [this]{
@@ -172,7 +184,10 @@ Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
         this->dData.data = this->zoomSlider->value();
         strcpy(this->dData.msg, ZOOM_CONTROL);
         dlock.unlock();
-        //this->client->RequestChange(ZOOM_CONTROL, this->zoomSlider->value());
+    });
+
+    connect(exposureSlider, &QSlider::valueChanged, this, [this]{
+        _recorder->SetExposure(this->exposureSlider->value());
     });
 
     dispatchThread = new std::thread(Layout::DispatchThread, this);

@@ -121,6 +121,16 @@ void Recorder::InitializeCamera(const char* const cameraSerial) {
     // return
 }
 
+void Recorder::SetExposure(int percentage) {
+    int thresh = MAX_EXPOSURE-MIN_EXPOSURE;
+    float perc = static_cast<float>(percentage)/100;
+    float calculatedExposure = (static_cast<float>(thresh)*perc)+MIN_EXPOSURE;
+
+    M_PRINT("New Exposure: %f", calculatedExposure);
+
+    CFloatParameter(_camera->GetNodeMap(), "ExposureTime").SetValue(calculatedExposure);
+}
+
 void Recorder::RecordThread(void *data) {
     RThreadData *baslerInfo = (RThreadData *)data;
 
@@ -148,7 +158,7 @@ void Recorder::RecordThread(void *data) {
         _closeThreadMtx.unlock();
 
         ONLY_DEBUG(M_PRINT("Retrieving image"));
-        baslerInfo->camera->RetrieveResult(5000, ptrGrabResult, TimeoutHandling_Return); // Retrieve frame with a 5000 ms timeout
+        baslerInfo->camera->RetrieveResult(8000, ptrGrabResult, TimeoutHandling_Return); // Retrieve frame with a 5000 ms timeout
 
         ONLY_DEBUG(M_PRINT("Processing result"));
         if(ptrGrabResult->GrabSucceeded()) { // If a frame is grabbed...

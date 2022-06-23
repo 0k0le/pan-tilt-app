@@ -19,6 +19,9 @@
 #define RESY 900
 #define BYTES_PER_PIXEL 3
 
+#define MIN_EXPOSURE 12
+#define MAX_EXPOSURE 999999
+
 using namespace Pylon;
 using namespace GenApi;
 
@@ -41,6 +44,7 @@ class Recorder {
         Recorder(const char* const cameraSerial, int framesPerSecond = 30, int quality = 90);
         ~Recorder();
 
+        void SetExposure(int percentage);
         bool StartRecording();
         void CopyFrameToQT(QImage *img);
 
