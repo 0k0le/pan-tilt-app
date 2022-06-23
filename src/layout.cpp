@@ -6,6 +6,34 @@
 #include "pylon-video.hpp"
 #include "moc/layout.moc"
 
+DISPATCHDATA Layout::dData;
+std::mutex Layout::dlock;
+
+void Layout::DispatchThread(void *data) {
+    M_UNUSED(data);
+
+    Layout *cur = (Layout*)data;
+
+    DISPATCHDATA last = {"0000", 0}, local = last;
+
+    while(1) {
+        dlock.lock();
+        memcpy(&local, &Layout::dData, sizeof(DISPATCHDATA));
+        dlock.unlock();
+
+        if(local.data == 500)
+            break;
+
+        if(strcmp(local.msg, last.msg) == 0 && local.data == last.data)
+            continue;
+
+        M_PRINT("Dispatching request");
+        cur->client->RequestChange(local.msg, local.data);
+
+        memcpy(&last, &local, sizeof(DISPATCHDATA));
+    }
+}
+
 Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
     client = new Client(bbgIp);
 
@@ -124,16 +152,30 @@ Layout::Layout(QLabel* parent, const char* const bbgIp) : QObject(parent) {
     gainLabel->show();
 
     connect(focusSlider, &QSlider::valueChanged, this, [this]{
-        this->client->RequestChange(FOCUS_CONTROL, this->focusSlider->value());
+        dlock.lock();
+        this->dData.data = this->focusSlider->value();
+        strcpy(this->dData.msg, FOCUS_CONTROL);
+        dlock.unlock();
+        //this->client->RequestChange(FOCUS_CONTROL, this->focusSlider->value());
     });
 
     connect(apertureSlider, &QSlider::valueChanged, this, [this]{
-        this->client->RequestChange(IRIS_CONTROL, this->apertureSlider->value());
+        dlock.lock();
+        this->dData.data = this->apertureSlider->value();
+        strcpy(this->dData.msg, IRIS_CONTROL);
+        dlock.unlock();
+        //this->client->RequestChange(IRIS_CONTROL, this->apertureSlider->value());
     });
 
     connect(zoomSlider, &QSlider::valueChanged, this, [this]{
-        this->client->RequestChange(ZOOM_CONTROL, this->zoomSlider->value());
+        dlock.lock();
+        this->dData.data = this->zoomSlider->value();
+        strcpy(this->dData.msg, ZOOM_CONTROL);
+        dlock.unlock();
+        //this->client->RequestChange(ZOOM_CONTROL, this->zoomSlider->value());
     });
+
+    dispatchThread = new std::thread(Layout::DispatchThread, this);
 }
 
 Layout::~Layout() {
@@ -158,4 +200,12 @@ Layout::~Layout() {
     delete gainLabel;
 
     delete client;
+
+    dlock.lock();
+    dData.data = 500;
+    strcpy(dData.msg, "0000");
+    dlock.unlock();
+
+    dispatchThread->join();
+    delete dispatchThread;
 }

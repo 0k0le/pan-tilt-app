@@ -23,7 +23,7 @@ GUI::GUI(const char* const cameraSerial, const char* const bbgIp, QObject *paren
 GUI::~GUI() {
     delete recorder;
     delete l;
-    delete img;
+    //delete img;
 }
 
 void GUI::HandleHozSlider() {

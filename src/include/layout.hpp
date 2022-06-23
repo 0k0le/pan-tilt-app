@@ -12,6 +12,11 @@
 #include <QSlider>
 #include <QLabel>
 
+typedef struct DispatchData {
+    char msg[5];
+    int data;
+} DISPATCHDATA;
+
 class Layout : public QObject {
     Q_OBJECT
     
@@ -42,4 +47,10 @@ class Layout : public QObject {
         QLabel* gainLabel;
 
         Client* client;
+
+        std::thread *dispatchThread = nullptr;
+
+        static void DispatchThread(void *data);
+        static std::mutex dlock;
+        static DISPATCHDATA dData;
 };
