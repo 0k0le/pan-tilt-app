@@ -134,7 +134,7 @@ void Recorder::SetExposure(int percentage) {
     //_camera->RetLock().Lock();
     M_PRINT("Attempting to set exposure");
     //_camera->BslExposureTimeMode.SetValue(Basler_UniversalCameraParams::ExposureTimeModeEnums::ExposureTimeMode_Standard);
-    _camera->ExposureTime.TrySetValue(3500.0);
+    _camera->ExposureTime.SetValuePercentOfRange(static_cast<double>(percentage));
     //_camera->RetLock().Unlock();
 }
 
