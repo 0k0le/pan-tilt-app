@@ -24,7 +24,7 @@ void Layout::DispatchThread(void *data) {
         if(local.data == 500)
             break;
 
-        if(strcmp(local.msg, last.msg) == 0 && local.data == last.data)
+        if(memcmp(&local, &last, sizeof(DISPATCHDATA)) == 0)
             continue;
 
         M_PRINT("Dispatching request");
