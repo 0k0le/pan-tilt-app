@@ -103,8 +103,12 @@ void Recorder::InitializeCamera(const char* const cameraSerial) {
         CIntegerParameter offsetY(_camera->GetNodeMap(), "OffsetY");
         CEnumParameter pixelFormat(_camera->GetNodeMap(), "PixelFormat");
 
+        // Exposure
         _camera->ExposureMode.SetValue(Basler_UniversalCameraParams::ExposureModeEnums::ExposureMode_Timed);
         _camera->ExposureAuto.SetValue(Basler_UniversalCameraParams::ExposureAuto_Off);
+
+        // White balance auto off
+        _camera->BalanceWhiteAuto.SetValue(Basler_UniversalCameraParams::BalanceWhiteAutoEnums::BalanceWhiteAuto_Off);
 
         // Set camera properties
         //width.TrySetValue(RESX, IntegerValueCorrection_Nearest);
@@ -124,12 +128,23 @@ void Recorder::InitializeCamera(const char* const cameraSerial) {
     // return
 }
 
-void Recorder::SetExposure(int percentage) {
-    int thresh = MAX_EXPOSURE-MIN_EXPOSURE;
-    float perc = static_cast<float>(percentage)/100;
-    float calculatedExposure = (static_cast<float>(thresh)*perc)+MIN_EXPOSURE;
+void Recorder::SetWhiteBalance(int percentage) {
+    _camera->BalanceRatioSelector.SetValue(Basler_UniversalCameraParams::BalanceRatioSelectorEnums::BalanceRatioSelector_Blue);
+    _camera->BalanceRatio.SetValuePercentOfRange(percentage);
+    
+    _camera->BalanceRatioSelector.SetValue(Basler_UniversalCameraParams::BalanceRatioSelectorEnums::BalanceRatioSelector_Green);
+    _camera->BalanceRatio.SetValuePercentOfRange(percentage);
 
-    M_PRINT("New Exposure: %f", calculatedExposure);
+    _camera->BalanceRatioSelector.SetValue(Basler_UniversalCameraParams::BalanceRatioSelectorEnums::BalanceRatioSelector_Red);
+    _camera->BalanceRatio.SetValuePercentOfRange(percentage);
+}
+
+void Recorder::SetExposure(int percentage) {
+    //int thresh = MAX_EXPOSURE-MIN_EXPOSURE;
+    //float perc = static_cast<float>(percentage)/100;
+    //float calculatedExposure = (static_cast<float>(thresh)*perc)+MIN_EXPOSURE;
+
+    //M_PRINT("New Exposure: %f", calculatedExposure);
 
     //_camera->RetLock().Lock();
     M_PRINT("Attempting to set exposure");

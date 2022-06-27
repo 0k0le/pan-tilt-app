@@ -46,6 +46,7 @@ class Recorder {
         ~Recorder();
 
         void SetExposure(int percentage);
+        void SetWhiteBalance(int percentage);
         bool StartRecording();
         void CopyFrameToQT(QImage *img);
 

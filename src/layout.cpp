@@ -190,6 +190,10 @@ Layout::Layout(Recorder* recorder, QLabel* parent, const char* const bbgIp) : QO
         _recorder->SetExposure(this->exposureSlider->value());
     });
 
+    connect(whitebalanceSlider, &QSlider::valueChanged, this, [this]{
+        _recorder->SetWhiteBalance(this->whitebalanceSlider->value());
+    });
+
     dispatchThread = new std::thread(Layout::DispatchThread, this);
 }
 
