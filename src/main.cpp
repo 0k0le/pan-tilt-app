@@ -26,18 +26,20 @@ int main(int argc, char** argv) {
 
     const char* const cameraSerial = argv[1];
     const char* const bbgIp = argv[2];
+    int ret = EXIT_SUCCESS;
 
-    QApplication app(argc, argv);
+    try {
+        QApplication app(argc, argv);
 
-    // QT object that controls the GUI
-    GUI *gui = new GUI(cameraSerial, bbgIp);
-    gui->run();
+        // QT object that controls the GUI
+        std::unique_ptr<GUI> gui = std::make_unique<GUI>(cameraSerial, bbgIp);
+        gui->run();
 
-    // Execute
-    int ret = app.exec();
-
-    // Cleanup
-    delete gui;
+        // Execute
+        ret = app.exec();
+    } catch(std::exception& e) {
+        std::cout << e.what() << std::endl;
+    }
 
     return ret;
 }

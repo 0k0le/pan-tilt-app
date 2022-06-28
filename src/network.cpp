@@ -18,7 +18,6 @@ void recv_full(int sock, int size, char* buf) {
 
 Client::Client(const char* const server, const int portnum,
     const int packetLen) : _port(portnum), _packetLen(packetLen) {
-    //char testmsg[PKTSIZE] = "TEST";
     char* testmsg = new char[_packetLen];
     strcpy(testmsg, "test");
 
@@ -38,7 +37,6 @@ Client::Client(const char* const server, const int portnum,
         M_FATAL("Failed to connect to BBG @ IP %s", server);
 
     send(_sock, testmsg, _packetLen, 0);
-    //recv(_sock, testmsg, _packetLen, 0);
     recv_full(_sock, _packetLen, testmsg);
 
     M_PRINT("Recieved: %s", testmsg);
