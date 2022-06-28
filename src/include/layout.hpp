@@ -26,29 +26,29 @@ class Layout : public QObject {
 
     private:
         // Rotation objects
-        QSlider* xRotationSlider;
-        QLabel* xRotationLabel;
-        QSlider* yRotationSlider;
-        QLabel* yRotationLabel;
+        std::unique_ptr<QSlider> xRotationSlider;
+        std::unique_ptr<QLabel> xRotationLabel;
+        std::unique_ptr<QSlider> yRotationSlider;
+        std::unique_ptr<QLabel> yRotationLabel;
 
         // Camera effects objects
-        QSlider* focusSlider;
-        QSlider* zoomSlider;
-        QSlider* apertureSlider;
-        QSlider* exposureSlider;
-        QSlider* whitebalanceSlider;
-        QSlider* gainSlider;
+        std::unique_ptr<QSlider> focusSlider;
+        std::unique_ptr<QSlider> zoomSlider;
+        std::unique_ptr<QSlider> apertureSlider;
+        std::unique_ptr<QSlider> exposureSlider;
+        std::unique_ptr<QSlider> whitebalanceSlider;
+        std::unique_ptr<QSlider> gainSlider;
         
-        QLabel* focusLabel;
-        QLabel* zoomLabel;
-        QLabel* apertureLabel;
-        QLabel* exposureLabel;
-        QLabel* whitebalanceLabel;
-        QLabel* gainLabel;
+        std::unique_ptr<QLabel> focusLabel;
+        std::unique_ptr<QLabel> zoomLabel;
+        std::unique_ptr<QLabel> apertureLabel;
+        std::unique_ptr<QLabel> exposureLabel;
+        std::unique_ptr<QLabel> whitebalanceLabel;
+        std::unique_ptr<QLabel> gainLabel;
 
-        Client* client;
+        std::unique_ptr<Client> client;
+        
         Recorder* _recorder;
-
         std::thread *dispatchThread = nullptr;
 
         static void DispatchThread(void *data);
