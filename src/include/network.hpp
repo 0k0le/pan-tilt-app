@@ -9,16 +9,24 @@
 
 #include <cstring>
 #include <stdio.h>
-#include <netdb.h>
-#include <netinet/in.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/socket.h>
+
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <io.h>
+
+#ifndef _WIN32
+#include <unistd.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#else
+#include <winsock.h>
+#endif
 
 #define IRIS_CONTROL "IRIS"
 #define ZOOM_CONTROL "ZOOM"

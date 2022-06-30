@@ -5,7 +5,9 @@
 
 // Standard includes
 #include <cstdlib>
+#ifndef _WIN32
 #include <unistd.h>
+#endif
 
 // local includes
 #include <macros.hpp>
@@ -19,6 +21,11 @@
 #include <QLabel>
 #include <QTimer>
 #include <QThread>
+
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 int main(int argc, char** argv) {
     if(argc < 3)

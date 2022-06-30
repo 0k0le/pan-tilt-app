@@ -16,6 +16,8 @@
 #include <thread>
 #include <mutex>
 
+#include "macros.hpp"
+
 #define RESX 1600
 #define RESY 900
 #define BYTES_PER_PIXEL 3

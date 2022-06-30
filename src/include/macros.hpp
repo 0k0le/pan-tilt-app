@@ -31,3 +31,10 @@
 #define M_FATAL(str, ...) { fprintf(stderr, "FATAL: " str "\n", ##__VA_ARGS__); exit(EXIT_FAILURE); } (void)(0)
 
 #endif
+
+#ifdef _WIN32
+#define _CRT_SECURE_NO_WARNINGS
+
+//#define bzero(...) ZeroMemory(__VA_ARGS__) 
+
+#endif

@@ -27,7 +27,11 @@ Client::Client(const char* const server, const int portnum,
     if(_sock == -1)
         M_FATAL("Failed to open TCP socket");
 
+#ifndef _WIN32
     bzero(&servaddr, sizeof(servaddr));
+#else
+    ZeroMemory(&servaddr, sizeof(servaddr));
+#endif
 
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = inet_addr(server);
@@ -54,7 +58,7 @@ void Client::RequestChange(const char* const command, int value) {
     send(_sock, command, _packetLen, 0);
 
     M_PRINT("Sending change value %d", value);
-    send(_sock, &value, sizeof(int), 0);
+    send(_sock, (const char *)(&value), sizeof(int), 0);
 
     recv_full(_sock, _packetLen, recvbuf);
 
