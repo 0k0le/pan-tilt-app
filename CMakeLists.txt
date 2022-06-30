@@ -42,7 +42,7 @@ set(MOC_SOURCE gui layout)
 if(CMAKE_SYSTEM MATCHES Windows)
     set(MOC_BIN \\Qt\\Qt5.12.12\\5.12.12\\msvc2015_64\\bin\\moc.exe)
 else()
-    set(MOC_BIN moc)
+    set(MOC_BIN mkdir -p src/moc && moc)
 endif()
 
 message(STATUS "Project DIR: ${PROJECT_SOURCE_DIR}")
