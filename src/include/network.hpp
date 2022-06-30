@@ -15,7 +15,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <io.h>
 
 #ifndef _WIN32
 #include <unistd.h>
@@ -26,6 +25,7 @@
 #include <netdb.h>
 #else
 #include <winsock.h>
+#include <io.h>
 #endif
 
 #define IRIS_CONTROL "IRIS"
