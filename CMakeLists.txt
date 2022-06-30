@@ -39,11 +39,19 @@ endif()
 
 # Create custom build for each moc dependency
 set(MOC_SOURCE gui layout)
+if(CMAKE_SYSTEM MATCHES Windows)
+    set(MOC_BIN \\Qt\\Qt5.12.12\\5.12.12\\msvc2015_64\\bin\\moc.exe)
+else()
+    set(MOC_BIN moc)
+endif()
+
+message(STATUS "Project DIR: ${PROJECT_SOURCE_DIR}")
+
 foreach(SOURCE IN LISTS MOC_SOURCE)
     message(STATUS "Setting up MOC ${SOURCE}")
     add_custom_command(
         OUTPUT "${PROJECT_SOURCE_DIR}/src/moc/${SOURCE}.moc"
-        COMMAND mkdir -p ${PROJECT_SOURCE_DIR}/src/moc && moc ${PROJECT_SOURCE_DIR}/src/include/${SOURCE}.hpp > ${PROJECT_SOURCE_DIR}/src/moc/${SOURCE}.moc
+        COMMAND ${MOC_BIN} ${PROJECT_SOURCE_DIR}/src/include/${SOURCE}.hpp > ${PROJECT_SOURCE_DIR}/src/moc/${SOURCE}.moc
         DEPENDS "${PROJECT_SOURCE_DIR}/src/${SOURCE}.cpp" "${PROJECT_SOURCE_DIR}/src/include/${SOURCE}.hpp"
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     )
@@ -56,5 +64,3 @@ if(CMAKE_SYSTEM MATCHES Linux)
 else()
     target_link_libraries(camapp Qt5::Widgets ${OpenCV_LIBS} ${Pylon_LIBS} PylonBase_v6_3 PylonUtility_v6_3 GenApi_MD_VC141_v3_1_Basler_pylon GCBase_MD_VC141_v3_1_Basler_pylon wsock32 ws2_32)
 endif()
-
-message(STATUS ${PROJECT_SOURCE_DIR})
