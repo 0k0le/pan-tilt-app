@@ -9,3 +9,5 @@ bin-int/**
 .vscode/targets.log
 
 build/**
+
+src/moc/**
